@@ -1,0 +1,328 @@
+body{
+    background-color: #0a0a23;
+    display: flex;
+    flex-direction: row;
+    justify-content: center; /* Centre horizontalement */
+    height: 100vh;          /* S'assure que la hauteur couvre toute la fenêtre */
+    margin: 0;              /* Supprime les marges par défaut */
+    font-size: 20px;
+    background-image: url('img/dragon.webp'); /* Remplace par le chemin réel */
+    background-size: cover; /* Adapte le fond à la taille de l'écran */
+    background-repeat: no-repeat; /* Pas de répétition */
+    background-attachment: fixed; /* Le fond reste fixe au scroll */
+    background-position: center; /* Centre l'image */
+    font-family: 'Cinzel', serif; /* Applique Cinzel comme police principale */
+}
+h1{
+    font-size: 20px;
+}
+
+#text{
+    background-color: rgba(10, 10, 35, 0.8);
+    color: #ffffff;
+    padding: 10px;
+    height: 100%;
+}
+
+.option-menu{
+    background-color: rgba(10, 10, 35, 0.8);
+    color: #ffffff;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+#equip, #inventory, #trophies, #bestiaire{
+    display: none;
+}
+
+#equip label{
+    margin-right: 10px;
+}
+#equip select{
+    width: 60%;
+    padding: 8px 12px;
+    font-size: 20px;
+    font-family: 'Cinzel', serif;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #fff;
+    color: black;
+}
+.equip-option{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+#game, #controls{
+    width: 50%;
+    height: fit-content;
+    background-color: rgba(255, 255, 255, 0.7); /* Blanc avec une opacité de 0.7 */
+    border-radius: 10px; /* Ajoute des coins arrondis pour un meilleur rendu (optionnel) */
+    color: #ffffff;
+    padding: 10px;
+    margin-top: 20px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 20px;
+}
+
+#options, #stats{
+    border: 1px solid #0a0a23;
+    color: #0a0a23;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+}
+
+#choices{
+    color: #0a0a23;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+}
+
+#actions, #shop, #useObject{
+    border: 1px solid #0a0a23;
+    color: #0a0a23;
+    padding: 5px;
+    display: none;
+    flex-direction: column;
+}
+
+#monsterStats{
+    border: 1px solid #0a0a23;
+    padding: 5px;
+    color: #ffffff;
+    background-color: #c70d0d;
+    display: none;
+    flex-direction: column;
+}
+
+.stat{
+    padding-right: 10px;
+}
+
+button{
+    cursor: pointer;
+    color: #0a0a23;
+    background-color: #feac32;
+    background-image: linear-gradient(#fecc4c, #ffac33);
+    border : 3px solid #feac32;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-size: 20px;
+    font-family: 'Cinzel', serif;
+    font-weight: bold;
+}
+
+.dialog {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+.dialog-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.3s ease;
+}
+
+.dialog-content h2 {
+    margin-top: 0;
+    color: #4CAF50;
+}
+
+.dialog-content button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.dialog-content button:hover {
+    background-color: #45a049;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Animation pour l'apparition de la boîte */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.monster-item {
+    margin-bottom: 15px; /* Ajoute de l'espace entre les éléments */
+    padding: 10px; /* Ajoute de l'espace interne pour le contenu */
+    border: 1px solid #ccc; /* Ajoute une bordure pour mieux distinguer les monstres */
+    border-radius: 5px; /* Arrondit les coins */
+    background-color: rgba(255, 255, 255, 0.1); /* Couleur de fond avec transparence */
+}
+#levelUpDialog {
+    z-index: 1000;
+}
+#brokenWeapon {
+    z-index: 1000;
+}
+#event {
+    z-index: 1000;
+}
+
+.trophy-item {
+    margin-bottom: 15px; /* Ajoute de l'espace entre les éléments */
+    padding: 10px; /* Ajoute de l'espace interne pour le contenu */
+    border: 1px solid #ccc; /* Ajoute une bordure pour mieux distinguer les monstres */
+    border-radius: 5px; /* Arrondit les coins */
+    background-color: rgba(255, 255, 255, 0.1); /* Couleur de fond avec transparence */
+}
+.trophy-item strong {
+    font-size: 1.2em;
+    color: orange;
+}
+.trophy-item em {
+    font-size: 0.9em;
+    color: white;
+}
+
+
+
+/* Titre et liste déroulante */
+.stat0 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+/* Liste déroulante */
+#titleSelect {
+    width: 70%;
+    padding: 8px 12px;
+    font-size: 20px;
+    font-family: 'Cinzel', serif;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #fff;
+    color: black;
+}
+
+
+
+
+
+
+
+
+
+/* Style général pour l'écran de chargement */
+#loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #1a1a1a; /* Couleur sombre */
+    color: #ffffff; /* Texte blanc */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    font-family: 'Cinzel', serif; /* Assurez-vous que la police est chargée */
+}
+
+/* Titre du jeu */
+.game-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6); /* Effet de lumière */
+}
+
+/* Nom du concepteur */
+.creator {
+    font-size: 1.2rem;
+    font-style: italic;
+    margin-bottom: 2rem;
+    color: #ccc; /* Couleur légèrement plus claire */
+}
+
+/* Loader (spinner) */
+.loader {
+    border: 4px solid #f3f3f3; /* Couleur claire */
+    border-top: 4px solid #3498db; /* Couleur principale */
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+}
+
+/* Animation de rotation */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Texte de chargement */
+#loading-screen p {
+    font-size: 1rem;
+    margin: 0;
+    text-align: center;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Media query pour les petits écrans (smartphones) */
+@media (max-width: 768px) {
+    body {
+        flex-direction: column; /* Aligne les divs en colonne sur téléphone */
+        justify-content: flex-start; /* Les divs commencent en haut */
+        align-items: center; /* Les divs occupent toute la largeur disponible */
+    }
+
+    #game, #controls{
+        width: 90%;
+        height: auto;
+    }
+
+    #text{
+        height: auto;
+    }
+}
