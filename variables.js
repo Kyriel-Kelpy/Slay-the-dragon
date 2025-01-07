@@ -170,6 +170,7 @@ function traitor(){
 }
 
 function goExplore(){
+    menuDiv.style.display = 'block';
     explorateur++;
     showTrophie();
 }
