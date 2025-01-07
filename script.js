@@ -307,6 +307,7 @@ function isPlayerDodge (speed){
 }
 
 function defeatMonster(){
+    menuDiv.style.display = 'none';
     displaySection("victory");
     killMonster++;
     useDiv.style.display = 'none';
@@ -336,28 +337,34 @@ function defeatMonster(){
     }
 
     if (monsterName2 === "Arlak, le Fort"){
+        menuDiv.style.display = 'block';
         displaySection("ragam5");
     }
 
     if (monsterName2 === "Anssio, le Rapide"){
+        menuDiv.style.display = 'block';
         displaySection("ragam6");
     }
 
     if (monsterName2 === "Leona Mereo, la Dresseuse Gloutonne"){
+        menuDiv.style.display = 'block';
         displaySection("vaincreLeona");
     }
 
     if (monsterName2 === "raganna, la dragonne"){
+        menuDiv.style.display = 'block';
         defeatDragon();
         displaySection("finishGame2");
     }
 
     if (monsterName2 === "Albion, le Chevalier Royal"){
+        menuDiv.style.display = 'block';
         defeatDragon();
         displaySection("victoireAlbion");
     }
 
     if (monsterName2 === "Albion, le Chevalier Dragon"){
+        menuDiv.style.display = 'block';
         defeatAlbion();
         displaySection("raidLeona10");
     }
