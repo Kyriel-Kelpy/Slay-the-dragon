@@ -261,6 +261,7 @@ button{
     font-weight: bold;
     margin-bottom: 0.5rem;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6); /* Effet de lumière */
+    color: orangered;
 }
 
 /* Nom du concepteur */
@@ -268,7 +269,7 @@ button{
     font-size: 1.2rem;
     font-style: italic;
     margin-bottom: 2rem;
-    color: #ccc; /* Couleur légèrement plus claire */
+    color: blue;
 }
 
 /* Loader (spinner) */
