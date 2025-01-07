@@ -271,6 +271,7 @@ function displayInventory() {
 
 
 function chercheButin(){
+    menuDiv.style.display = 'none';
     showTrophie();
     seeker++;
     health -= 10;
@@ -332,7 +333,7 @@ function goFightDragon(){
 }
 
 function wanderer() {
-
+    menuDiv.style.display = 'none';
     rodeur++;
     health -= 10;
     healthText.innerText = health;
@@ -675,7 +676,9 @@ const story = {
             Ce qui vous fatigue un peu et vous perdez 10 points de santé.<br><br>
          `,
         choices: [
-             { text: "Suivant", next: "city" },
+             { text: "Suivant", next: "city", action: function() {
+                menuDiv.style.display = 'block';
+            } },
         ]
      },
 
@@ -773,7 +776,9 @@ const story = {
          `,
          choices: [
             { text: "Continuer les explorations", next: "explore", action: goExplore },
-            { text: "Retourner en ville", next: "city" },
+            { text: "Retourner en ville", next: "city", action: function() {
+                menuDiv.style.display = 'block';
+            } },
        ]
      },
 
