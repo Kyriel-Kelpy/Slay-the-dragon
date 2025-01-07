@@ -30,7 +30,7 @@ let seekFail = 0;
 let killMonster = 0;
 let finishGame1 = 0;
 let finishGame2 = 0;
-
+let playerProgression = "";
 let playerTrophies = [];
 
 function defeatDragon(){
