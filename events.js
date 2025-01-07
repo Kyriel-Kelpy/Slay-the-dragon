@@ -1725,6 +1725,7 @@ const story = {
 
 
 function displaySection(sectionId) {
+    playerProgression = sectionId;
     const section = story[sectionId];
     if (!section) {
         console.warn(`Section "${sectionId}" introuvable dans l'histoire.`);
