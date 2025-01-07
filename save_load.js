@@ -1,50 +1,39 @@
-// Exemple d'objet représentant l'état du jeu
-const gameState = {
-    player: {
-        health: health,
-        baseHealth: baseHealth,
-        maxHealth: maxHealth,
-        xp: xp,
-        level: lvl,
-        gold: gold,
-        strenght: strenght,
-        baseStrenght: baseStrenght,
-        speed: speed,
-        baseSpeed: baseSpeed,
+function saveGame() {
+    const gameData = {
+        level: document.getElementById("lvlText").innerText,
+        xp: document.getElementById("xpText").innerText,
+        health: document.getElementById("healthText").innerText,
+        maxHealth: document.getElementById("maxHealthText").innerText,
+        strength: document.getElementById("strenght").innerText,
+        speed: document.getElementById("speed").innerText,
+        gold: document.getElementById("goldText").innerText,
+    };
+    
+    // Sauvegarde les données dans le localStorage
+    localStorage.setItem("slayTheDragonSave", JSON.stringify(gameData));
+    alert("Jeu sauvegardé !");
+}
+
+
+
+function loadGame() {
+    const savedGame = JSON.parse(localStorage.getItem("slayTheDragonSave"));
+    
+    if (savedGame) {
+        document.getElementById("lvlText").innerText = savedGame.level;
+        document.getElementById("xpText").innerText = savedGame.xp;
+        document.getElementById("healthText").innerText = savedGame.health;
+        document.getElementById("maxHealthText").innerText = savedGame.maxHealth;
+        document.getElementById("strenght").innerText = savedGame.strength;
+        document.getElementById("speed").innerText = savedGame.speed;
+        document.getElementById("goldText").innerText = savedGame.gold;
         
-    },
-};
-
-// Sauvegarde de l'état complet du jeu
-buttonSave.addEventListener("click", () => {
-    localStorage.setItem("gameState", JSON.stringify(gameState)); // Sauvegarder l'objet dans le localStorage
-    alert("Le jeu a été sauvegardé !");
-});
-
-// Chargement de l'état du jeu
-buttonLoad.addEventListener("click", () => {
-    const savedGameState = localStorage.getItem("gameState");
-
-    if (savedGameState) {
-        const loadedState = JSON.parse(savedGameState); // Récupérer l'objet du localStorage
-
-        // Appliquez cet état aux éléments du jeu
-        console.log("Nom du joueur : " + loadedState.player.name);
-        console.log("Niveau : " + loadedState.player.level);
-        console.log("Position : ", loadedState.player.position);
-        // Mettre à jour l'interface du jeu avec les données chargées
-
-        // Exemple d'application de l'état
-        // Par exemple, replaçons le joueur à sa position sauvegardée
-        player.position = loadedState.player.position;
-
-        // Vous pouvez également restaurer des ennemis, objets, etc.
-        enemies = loadedState.enemies;
-        inventory = loadedState.player.inventory;
-        difficulty = loadedState.settings.difficulty;
-
-        alert("Jeu chargé avec succès !");
+        setTitles(savedGame.titles);  // Restaurer les titres sauvegardés
+        alert("Jeu chargé !");
     } else {
-        alert("Aucune sauvegarde trouvée.");
+        alert("Aucune sauvegarde trouvée !");
     }
-});
+}
+
+buttonSave.onclick = saveGame;
+buttonLoad.onclick = loadGame;
