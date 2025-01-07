@@ -88,342 +88,49 @@ function onAchievementUnlocked(achievementTitle) {
     }
 }
 
-function showTrophie(){
-    // Sélectionne le dialog box et le message de niveau
+function showTrophie() {
     const dialogBox = document.getElementById("trophie");
     const msg = document.getElementById("trophieMsg");
     let message = "";
 
     if (!dialogBox || !msg) {
-        console.error("Les éléments dDialogBox ou msg sont introuvables !");
+        console.error("Les éléments dialogBox ou msg sont introuvables !");
         return;
     }
 
-    if (killMonster === 50) {
-        playerTrophies.push(titres[3]);
-        message = "Vous avez déverrouillé l'Achèvement : " + titres[3].titre + " !!";
-        // Mettre à jour le contenu du message
-        msg.innerText = message;
-        // Afficher la boîte de dialogue
-        dialogBox.classList.remove("hidden");
-        updateTrophiesSection();
-        onAchievementUnlocked(titres[3].titre);
-    }
+    const unlockTrophie = (trophie, conditionMet) => {
+        if (conditionMet && !playerTrophies.some(t => t.titre === trophie.titre)) {
+            playerTrophies.push(trophie);
+            message = "Vous avez déverrouillé l'Achèvement : " + trophie.titre + " !!";
+            msg.innerText = message;
+            dialogBox.classList.remove("hidden");
+            updateTrophiesSection();
+            onAchievementUnlocked(trophie.titre);
+        }
+    };
 
-    if (killMonster === 100) {
-        playerTrophies.push(titres[4]);
-        message = "Vous avez déverrouillé l'Achèvement : " + titres[4].titre + " !!";
-        // Mettre à jour le contenu du message
-        msg.innerText = message;
-        // Afficher la boîte de dialogue
-        dialogBox.classList.remove("hidden");
-        updateTrophiesSection();
-        onAchievementUnlocked(titres[4].titre)
-    }
-
-    if (killMonster === 250) {
-        playerTrophies.push(titres[5]);
-        message = "Vous avez déverrouillé l'Achèvement : " + titres[5].titre + " !!";
-        // Mettre à jour le contenu du message
-        msg.innerText = message;
-        // Afficher la boîte de dialogue
-        dialogBox.classList.remove("hidden");
-        updateTrophiesSection();
-        onAchievementUnlocked(titres[5].titre)
-    }
-
-    if (killMonster === 500) {
-        playerTrophies.push(titres[6]);
-        message = "Vous avez déverrouillé l'Achèvement : " + titres[6].titre + " !!";
-        // Mettre à jour le contenu du message
-        msg.innerText = message;
-        // Afficher la boîte de dialogue
-        dialogBox.classList.remove("hidden");
-        updateTrophiesSection();
-        onAchievementUnlocked(titres[6].titre)
-    }
-
-    if (bestiaire.filter(monstre => monstre.zone === "plaines émeraudes").length >= 9) {
-        // Action à exécuter si la condition est remplie
-        console.log("Vous avez rencontré tous les monstres des Plaines Émeraudes !");
-        playerTrophies.push(titres[0]);
-        message = "Vous avez déverrouillé l'Achèvement : " + titres[0].titre + " !!";
-        // Mettre à jour le contenu du message
-        msg.innerText = message;
-        // Afficher la boîte de dialogue
-        dialogBox.classList.remove("hidden");
-        updateTrophiesSection();
-        onAchievementUnlocked(titres[0].titre)
-    }
-
-    if (bestiaire.filter(monstre => monstre.zone === "forêt lugubre").length >= 9) {
-        // Action à exécuter si la condition est remplie
-        console.log("Vous avez rencontré tous les monstres des Plaines Émeraudes !");
-        playerTrophies.push(titres[1]);
-        message = "Vous avez déverrouillé l'Achèvement : " + titres[1].titre + " !!";
-        // Mettre à jour le contenu du message
-        msg.innerText = message;
-        // Afficher la boîte de dialogue
-        dialogBox.classList.remove("hidden");
-        updateTrophiesSection();
-        onAchievementUnlocked(titres[1].titre)
-    }
-
-    if (bestiaire.filter(monstre => monstre.zone === "grottes obscures").length >= 9) {
-        // Action à exécuter si la condition est remplie
-        console.log("Vous avez rencontré tous les monstres des Plaines Émeraudes !");
-        playerTrophies.push(titres[2]);
-        message = "Vous avez déverrouillé l'Achèvement : " + titres[2].titre + " !!";
-        // Mettre à jour le contenu du message
-        msg.innerText = message;
-        // Afficher la boîte de dialogue
-        dialogBox.classList.remove("hidden");
-        updateTrophiesSection();
-        onAchievementUnlocked(titres[2].titre)
-    }
-
-    if (typePlant === 5) {
-        playerTrophies.push(titres[7]);
-        message = "Vous avez déverrouillé l'Achèvement : " + titres[7].titre + " !!";
-        // Mettre à jour le contenu du message
-        msg.innerText = message;
-        // Afficher la boîte de dialogue
-        dialogBox.classList.remove("hidden");
-        updateTrophiesSection();
-        onAchievementUnlocked(titres[7].titre)
-    }
-
-    if (typeSlime === 20) {
-        playerTrophies.push(titres[8]);
-        message = "Vous avez déverrouillé l'Achèvement : " + titres[8].titre + " !!";
-        // Mettre à jour le contenu du message
-        msg.innerText = message;
-        // Afficher la boîte de dialogue
-        dialogBox.classList.remove("hidden");
-        updateTrophiesSection();
-        onAchievementUnlocked(titres[8].titre)
-    }
-
-    if (typeBeast === 30) {
-        playerTrophies.push(titres[9]);
-        message = "Vous avez déverrouillé l'Achèvement : " + titres[9].titre + " !!";
-        // Mettre à jour le contenu du message
-        msg.innerText = message;
-        // Afficher la boîte de dialogue
-        dialogBox.classList.remove("hidden");
-        updateTrophiesSection();
-        onAchievementUnlocked(titres[9].titre)
-    }
-
-    if (typeWinged === 5) {
-        playerTrophies.push(titres[10]);
-        message = "Vous avez déverrouillé l'Achèvement : " + titres[10].titre + " !!";
-        // Mettre à jour le contenu du message
-        msg.innerText = message;
-        // Afficher la boîte de dialogue
-        dialogBox.classList.remove("hidden");
-        updateTrophiesSection();
-        onAchievementUnlocked(titres[10].titre)
-    }
-
-    if (typeHumanoid === 5) {
-        playerTrophies.push(titres[11]);
-        message = "Vous avez déverrouillé l'Achèvement : " + titres[11].titre + " !!";
-        // Mettre à jour le contenu du message
-        msg.innerText = message;
-        // Afficher la boîte de dialogue
-        dialogBox.classList.remove("hidden");
-        updateTrophiesSection();
-        onAchievementUnlocked(titres[11].titre)
-    }
-
-    if (typeSpirit === 9) {
-        playerTrophies.push(titres[12]);
-        message = "Vous avez déverrouillé l'Achèvement : " + titres[12].titre + " !!";
-        // Mettre à jour le contenu du message
-        msg.innerText = message;
-        // Afficher la boîte de dialogue
-        dialogBox.classList.remove("hidden");
-        updateTrophiesSection();
-        onAchievementUnlocked(titres[12].titre)
-    }
-
-    if (typeDemon === 10) {
-        playerTrophies.push(titres[13]);
-        message = "Vous avez déverrouillé l'Achèvement : " + titres[13].titre + " !!";
-        // Mettre à jour le contenu du message
-        msg.innerText = message;
-        // Afficher la boîte de dialogue
-        dialogBox.classList.remove("hidden");
-        updateTrophiesSection();
-        onAchievementUnlocked(titres[13].titre)
-    }
-
-    if (typeReptil === 10) {
-        playerTrophies.push(titres[14]);
-        message = "Vous avez déverrouillé l'Achèvement : " + titres[14].titre + " !!";
-        // Mettre à jour le contenu du message
-        msg.innerText = message;
-        // Afficher la boîte de dialogue
-        dialogBox.classList.remove("hidden");
-        updateTrophiesSection();
-        onAchievementUnlocked(titres[14].titre)
-    }
-
-    if (typeInsect === 5) {
-        playerTrophies.push(titres[15]);
-        message = "Vous avez déverrouillé l'Achèvement : " + titres[15].titre + " !!";
-        // Mettre à jour le contenu du message
-        msg.innerText = message;
-        // Afficher la boîte de dialogue
-        dialogBox.classList.remove("hidden");
-        updateTrophiesSection();
-        onAchievementUnlocked(titres[15].titre)
-    }
-
-    if (typeDragon === 5) {
-        playerTrophies.push(titres[16]);
-        message = "Vous avez déverrouillé l'Achèvement : " + titres[16].titre + " !!";
-        // Mettre à jour le contenu du message
-        msg.innerText = message;
-        // Afficher la boîte de dialogue
-        dialogBox.classList.remove("hidden");
-        updateTrophiesSection();
-        onAchievementUnlocked(titres[16].titre)
-    }
-
-    if (seeker === 100) {
-        playerTrophies.push(titres[17]);
-        message = "Vous avez déverrouillé l'Achèvement : " + titres[17].titre + " !!";
-        // Mettre à jour le contenu du message
-        msg.innerText = message;
-        // Afficher la boîte de dialogue
-        dialogBox.classList.remove("hidden");
-        updateTrophiesSection();
-        onAchievementUnlocked(titres[17].titre)
-    }
-
-    if (seekFail === 50) {
-        playerTrophies.push(titres[18]);
-        message = "Vous avez déverrouillé l'Achèvement : " + titres[18].titre + " !!";
-        // Mettre à jour le contenu du message
-        msg.innerText = message;
-        // Afficher la boîte de dialogue
-        dialogBox.classList.remove("hidden");
-        updateTrophiesSection();
-        onAchievementUnlocked(titres[18].titre)
-    }
-
-    if (inn === 25) {
-        playerTrophies.push(titres[19]);
-        message = "Vous avez déverrouillé l'Achèvement : " + titres[19].titre + " !!";
-        // Mettre à jour le contenu du message
-        msg.innerText = message;
-        // Afficher la boîte de dialogue
-        dialogBox.classList.remove("hidden");
-        updateTrophiesSection();
-        onAchievementUnlocked(titres[19].titre)
-    }
-
-    if (explorateur === 100) {
-        playerTrophies.push(titres[20]);
-        message = "Vous avez déverrouillé l'Achèvement : " + titres[20].titre + " !!";
-        // Mettre à jour le contenu du message
-        msg.innerText = message;
-        // Afficher la boîte de dialogue
-        dialogBox.classList.remove("hidden");
-        updateTrophiesSection();
-        onAchievementUnlocked(titres[20].titre)
-    }
-
-    if (rodeur === 100) {
-        playerTrophies.push(titres[21]);
-        message = "Vous avez déverrouillé l'Achèvement : " + titres[21].titre + " !!";
-        // Mettre à jour le contenu du message
-        msg.innerText = message;
-        // Afficher la boîte de dialogue
-        dialogBox.classList.remove("hidden");
-        updateTrophiesSection();
-        onAchievementUnlocked(titres[21].titre)
-    }
-
-    if (goShop === 25) {
-        playerTrophies.push(titres[22]);
-        message = "Vous avez déverrouillé l'Achèvement : " + titres[22].titre + " !!";
-        // Mettre à jour le contenu du message
-        msg.innerText = message;
-        // Afficher la boîte de dialogue
-        dialogBox.classList.remove("hidden");
-        updateTrophiesSection();
-        onAchievementUnlocked(titres[22].titre)
-    }
-
-    if (trophieRagam === 1) {
-        playerTrophies.push(titres[23]);
-        message = "Vous avez déverrouillé l'Achèvement : " + titres[23].titre + " !!";
-        // Mettre à jour le contenu du message
-        msg.innerText = message;
-        // Afficher la boîte de dialogue
-        dialogBox.classList.remove("hidden");
-        updateTrophiesSection();
-        onAchievementUnlocked(titres[23].titre)
-    }
-
-    if (trophieKlaara === 1) {
-        playerTrophies.push(titres[24]);
-        message = "Vous avez déverrouillé l'Achèvement : " + titres[24].titre + " !!";
-        // Mettre à jour le contenu du message
-        msg.innerText = message;
-        // Afficher la boîte de dialogue
-        dialogBox.classList.remove("hidden");
-        updateTrophiesSection();
-        onAchievementUnlocked(titres[24].titre)
-    }
-
-    if (trophieYann === 1) {
-        playerTrophies.push(titres[25]);
-        message = "Vous avez déverrouillé l'Achèvement : " + titres[25].titre + " !!";
-        // Mettre à jour le contenu du message
-        msg.innerText = message;
-        // Afficher la boîte de dialogue
-        dialogBox.classList.remove("hidden");
-        updateTrophiesSection();
-        onAchievementUnlocked(titres[25].titre)
-    }
-
-    if (raidLeona === 1) {
-        playerTrophies.push(titres[26]);
-        message = "Vous avez déverrouillé l'Achèvement : " + titres[26].titre + " !!";
-        // Mettre à jour le contenu du message
-        msg.innerText = message;
-        // Afficher la boîte de dialogue
-        dialogBox.classList.remove("hidden");
-        updateTrophiesSection();
-        onAchievementUnlocked(titres[26].titre)
-    }
-
-    if (finishGame2 === 1) {
-        playerTrophies.push(titres[27]);
-        message = "Vous avez déverrouillé l'Achèvement : " + titres[27].titre + " !!";
-        // Mettre à jour le contenu du message
-        msg.innerText = message;
-        // Afficher la boîte de dialogue
-        dialogBox.classList.remove("hidden");
-        updateTrophiesSection();
-        onAchievementUnlocked(titres[27].titre)
-    }
-
-    if (finishGame1 === 1) {
-        playerTrophies.push(titres[28]);
-        message = "Vous avez déverrouillé l'Achèvement : " + titres[28].titre + " !!";
-        // Mettre à jour le contenu du message
-        msg.innerText = message;
-        // Afficher la boîte de dialogue
-        dialogBox.classList.remove("hidden");
-        updateTrophiesSection();
-        onAchievementUnlocked(titres[28].titre)
-    }
+    unlockTrophie(titres[3], killMonster === 50);
+    unlockTrophie(titres[4], killMonster === 100);
+    unlockTrophie(titres[5], killMonster === 250);
+    unlockTrophie(titres[6], killMonster === 500);
+    unlockTrophie(titres[0], bestiaire.filter(monstre => monstre.zone === "plaines émeraudes").length >= 9);
+    unlockTrophie(titres[1], bestiaire.filter(monstre => monstre.zone === "forêt lugubre").length >= 9);
+    unlockTrophie(titres[2], bestiaire.filter(monstre => monstre.zone === "grottes obscures").length >= 9);
+    unlockTrophie(titres[7], typePlant === 5);
+    unlockTrophie(titres[8], typeSlime === 20);
+    unlockTrophie(titres[9], typeBeast === 30);
+    unlockTrophie(titres[10], typeWinged === 5);
+    unlockTrophie(titres[11], typeHumanoid === 5);
+    unlockTrophie(titres[12], typeSpirit === 9);
+    unlockTrophie(titres[13], typeDemon === 10);
+    unlockTrophie(titres[14], typeReptil === 10);
+    unlockTrophie(titres[15], typeInsect === 5);
+    unlockTrophie(titres[16], typeDragon === 5);
+    unlockTrophie(titres[17], seeker === 100);
+    unlockTrophie(titres[18], seekFail === 50);
+    unlockTrophie(titres[19], inn === 25);
 }
+
 
 
 
