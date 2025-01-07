@@ -311,6 +311,7 @@ const orikalk = {
 }
 
 function recompenseArlen(){
+    menuDiv.style.display = 'block';
     trophieYann = 1;
     const armor = orikalk;
     playerProtections.push(armor);
