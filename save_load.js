@@ -65,7 +65,6 @@ function loadGame() {
     const savedGame = JSON.parse(localStorage.getItem("slayTheDragonSave"));
 
     if (savedGame) {
-        displaySection(playerProgression);
 
         // Restaurer les variables principales
         xp = savedGame.xp || 0;
@@ -143,6 +142,7 @@ function loadGame() {
         updateTrophiesSection();
         displayInventory();
 
+        displaySection(playerProgression);
         alert("Jeu chargé !");
     } else {
         alert("Aucune sauvegarde trouvée !");
