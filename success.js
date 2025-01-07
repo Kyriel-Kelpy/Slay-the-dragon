@@ -129,6 +129,16 @@ function showTrophie() {
     unlockTrophie(titres[17], seeker === 100);
     unlockTrophie(titres[18], seekFail === 50);
     unlockTrophie(titres[19], inn === 25);
+    unlockTrophie(titres[20], explorateur === 100);
+    unlockTrophie(titres[21], rodeur === 100);
+    unlockTrophie(titres[22], goShop === 25);
+    unlockTrophie(titres[23], trophieRagam === 1);
+    unlockTrophie(titres[24], trophieKlaara === 1);
+    unlockTrophie(titres[25], trophieYann === 1);
+    unlockTrophie(titres[26], raidLeona === 1);
+    unlockTrophie(titres[27], finishGame2 === 1);
+    unlockTrophie(titres[28], finishGame1 === 1);
+
 }
 
 
