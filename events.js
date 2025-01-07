@@ -296,6 +296,7 @@ function chercheButin(){
 }
 
 function rest(){
+    menuDiv.style.display = 'none';
     inn++;
     if(health === maxHealth){
         textDiv.innerText += "\n Votre santé est au maximum. Inutile de vous reposer ! \n";
@@ -788,7 +789,9 @@ const story = {
          `,
          choices: [
             { text: "Continuer les explorations", next: "explore", action: goExplore },
-            { text: "Retourner en ville", next: "city" },
+            { text: "Retourner en ville", next: "city", action: function() {
+                menuDiv.style.display = 'block';
+            } },
        ]
      },
 
@@ -816,7 +819,9 @@ const story = {
         Vous vous rendez à l'auberge.<br><br>
          `,
          choices: [
-            { text: "Aller en ville", next: "city" },
+            { text: "Aller en ville", next: "city", action: function() {
+                menuDiv.style.display = 'block';
+            } },
        ]
      },
 
