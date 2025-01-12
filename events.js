@@ -329,7 +329,7 @@ function goFightDragon(){
     if(leona === 1){
         displaySection("promesseLeona");
     }else if(raidLeona === 1){
-
+        displaySection("raidLeona");
     }
 }
 
