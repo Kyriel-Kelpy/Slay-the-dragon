@@ -11,7 +11,6 @@ function updateLevel(currentXp) {
         // Augmente les statistiques selon la valeur aléatoire
         switch (randomStatBoost) {
             case 0:
-                health += 1;
                 maxHealth += 1;
                 baseHealth += 1;
                 speed += 1;
@@ -21,23 +20,19 @@ function updateLevel(currentXp) {
                 statMessage = "Vos stats ont augmenté : Santé max +1, Puissance +1, Vitesse +1.";
                 strenghtText.innerText = strenght;
                 speedText.innerText = speed;
-                healthText.innerText = health;
                 maxHealthText.innerText = maxHealth;
                 break;
             case 1:
                 maxHealth += 1;
-                health += 1;
                 baseHealth += 1;
                 speed += 1;
                 baseSpeed +=1;
                 statMessage = "Vos statistiques ont augmenté : Santé max +1, Vitesse +1.";
                 speedText.innerText = speed;
-                healthText.innerText = health;
                 maxHealthText.innerText = maxHealth;
                 break;
             case 2:
                 maxHealth += 1;
-                health += 1;
                 baseHealth += 1;
                 strenght += 1;
                 baseStrenght +=1;
@@ -52,11 +47,21 @@ function updateLevel(currentXp) {
           showLevelUpDialog(`Level Up !! Vous êtes passé du niveau ${lvl} au niveau ${newLevel}.<br>${statMessage}`);
         
         // Met à jour le niveau et l'affichage
+        health = maxHealth;
+        healthText.innerText = health;
         lvl = newLevel;
         lvlText.innerText = lvl;
     }
 
     console.log(`XP actuel : ${currentXp}, Niveau actuel : ${lvl}`);
+
+    if (lvl === 50 && (finishGame2 !== 1 || raidLeona !== 1)){
+        displaySection("lose2");        
+        monsterStats.style.display = 'none';
+        actionsDiv.style.display = 'none';
+        useDiv.style.display = 'none';
+        menuDiv.style.display = 'none';
+    }
 }
 
 function showLevelUpDialog(message) {
@@ -267,7 +272,7 @@ function attack() {
     }
 
     // Monstre attaque le joueur
-    if (isPlayerDodge()) {
+    if (isPlayerDodge(speed)) {
         textDiv.innerText += "Vous esquivez l'attaque du monstre.\n";
     } else {
         opponentDamage = getAttackValue(monsters[monsterIndex].power);
@@ -401,7 +406,6 @@ function defeatMonster(){
 
     monsterStats.style.display = 'none';
     actionsDiv.style.display = 'none';
-    menuDiv.style.display = 'block';
     updateLevel(xp);
 
     showEvent();
@@ -511,9 +515,13 @@ function equipItem(type) {
             console.log("Aucun accessoire équipé, vitesse réinitialisée :", speed);
         } else {
             item.action();
+            if (speed > 80){
+                speed = 80;
+                speedText.innerText = speed;
+            }  
             console.log(`${item.name} équipé avec succès !`);
             currentAccessory = item.name;
-        }
+        }      
     }
 }
 
@@ -623,12 +631,3 @@ function useItem(index) {
 button2.onclick = () =>{
     useObject();
 }
-
-if (lvl === 50 && (finishGame2 !== 1 || raidLeona !== 1)){
-    displaySection("lose2");        
-    monsterStats.style.display = 'none';
-    actionsDiv.style.display = 'none';
-    useDiv.style.display = 'none';
-    menuDiv.style.display = 'none';
-}
-
