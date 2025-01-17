@@ -55,7 +55,7 @@ h1{
     margin-bottom: 15px;
 }
 
-#game, #controls{
+#game, #control{
     width: 50%;
     height: fit-content;
     background-color: rgba(255, 255, 255, 0.7); /* Blanc avec une opacité de 0.7 */
@@ -318,7 +318,7 @@ button{
         align-items: center; /* Les divs occupent toute la largeur disponible */
     }
 
-    #game, #controls{
+    #game, #control{
         width: 90%;
         height: auto;
     }
