@@ -1740,6 +1740,11 @@ function displaySection(sectionId) {
     // Afficher le texte de l'histoire
     textDiv.innerHTML = section.text;
 
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth' // Défilement fluide
+    });
+
     // Gérer les choix
     choicesDiv.innerHTML = ""; // Effacer les anciens choix
     if (section.choices) {
