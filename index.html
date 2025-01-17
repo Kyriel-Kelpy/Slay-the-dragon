@@ -6,63 +6,65 @@
     <link rel="icon" type="image/png" href="img/favicon.png">
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5222667618613458"
-     crossorigin="anonymous"></script>
     <title>RPG - Slay the dragon</title>
 </head>
 <body>
-    <div id="controls">
-        <div id="options">
-            <h1>✧Menu✧</h1>
-            <button id="save">Sauvegarder</button>
-            <button id="load">Charger</button>
-            <button id="menu1">Équipement</button>
-            <button id="menu2">Consulter l'inventaire</button>
-            <button id="menu3">Achèvements</button>
-            <button id="menu4">Bestiaire</button>
-        </div>
-        
-        <div id="equip" class="option-menu">
-            <h1>✧Équipement✧</h1>
-            <div class="equip-option">
-                <label for="arme">Arme :</label>
-                <select id="arme" onchange="equipItem('weapon')">
-                    <option value="" disabled selected>Choisir une arme</option>
-                </select>
+    <div id="control">
+        <button id="afficheMenu">Afficher/Maquer le menu</button>
+        <div id="controls">
+            <div id="options">
+                <h1>✧Menu✧</h1>
+                <button id="save">Sauvegarder</button>
+                <button id="load">Charger</button>
+                <button id="menu1">Équipement</button>
+                <button id="menu2">Consulter l'inventaire</button>
+                <button id="menu3">Achèvements</button>
+                <button id="menu4">Bestiaire</button>
             </div>
-            <div class="equip-option">
-                <label for="protection">Protection :</label>
-                <select id="protection" onchange="equipItem('protection')">
-                    <option value="" disabled selected>Choisir une protection</option>
-                </select>
+            
+            <div id="equip" class="option-menu">
+                <h1>✧Équipement✧</h1>
+                <div class="equip-option">
+                    <label for="arme">Arme :</label>
+                    <select id="arme" onchange="equipItem('weapon')">
+                        <option value="" disabled selected>Choisir une arme</option>
+                    </select>
+                </div>
+                <div class="equip-option">
+                    <label for="protection">Protection :</label>
+                    <select id="protection" onchange="equipItem('protection')">
+                        <option value="" disabled selected>Choisir une protection</option>
+                    </select>
+                </div>
+                <div class="equip-option">
+                    <label for="accessoire">Accessoire :</label>
+                    <select id="accessoire" onchange="equipItem('accessory')">
+                        <option value="" disabled selected>Choisir un accessoire</option>
+                    </select>
+                </div>
+                <button id="close" onclick="closeSection('equip')">Fermer</button>
             </div>
-            <div class="equip-option">
-                <label for="accessoire">Accessoire :</label>
-                <select id="accessoire" onchange="equipItem('accessory')">
-                    <option value="" disabled selected>Choisir un accessoire</option>
-                </select>
+
+            <div id="inventory" class="option-menu">
+                <h1>✧Inventaire✧</h1>
+                <ul id="inventory-list"></ul>
+                <button id="close" onclick="closeSection('inventory')">Fermer</button>
             </div>
-            <button id="close" onclick="closeSection('equip')">Fermer</button>
-        </div>
 
-        <div id="inventory" class="option-menu">
-            <h1>✧Inventaire✧</h1>
-            <ul id="inventory-list"></ul>
-            <button id="close" onclick="closeSection('inventory')">Fermer</button>
-        </div>
+            <div id="trophies" class="option-menu">
+                <h1>✧Achèvements✧</h1>
+                <button id="close" onclick="closeSection('trophies')">Fermer</button>
+                <div id="trophies-list"></div>
+            </div>
 
-        <div id="trophies" class="option-menu">
-            <h1>✧Achèvements✧</h1>
-            <button id="close" onclick="closeSection('trophies')">Fermer</button>
-            <div id="trophies-list"></div>
-        </div>
-
-        <div id="bestiaire" class="option-menu">
-            <h1>✧Bestiaire✧</h1>
-            <button id="close" onclick="closeSection('bestiaire')">Fermer</button>
-            <div id="monster-list"></div>
+            <div id="bestiaire" class="option-menu">
+                <h1>✧Bestiaire✧</h1>
+                <button id="close" onclick="closeSection('bestiaire')">Fermer</button>
+                <div id="monster-list"></div>
+            </div>
         </div>
     </div>
+    
     <div id="game">
         <div id="stats">
             <h1>✧Stats✧</h1>
