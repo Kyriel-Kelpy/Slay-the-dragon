@@ -42,7 +42,10 @@ function defeatAlbion(){
     showTrophie();
 }
 
-const menuDiv = document.querySelector("#controls");
+
+const menuDiv = document.querySelector("#afficheMenu");
+const menuContent = document.querySelector("#controls");
+menuContent.style.display = 'none';
 const actionsDiv = document.querySelector("#actions");
 const useDiv = document.querySelector("#useObject");
 
@@ -174,3 +177,13 @@ function goExplore(){
     explorateur++;
     showTrophie();
 }
+
+function afficheMenu(){
+    if (menuContent.style.display === 'none'){
+        menuContent.style.display = 'block';
+    } else {
+        menuContent.style.display = 'none';
+    }
+}
+
+menuDiv.onclick = afficheMenu;
