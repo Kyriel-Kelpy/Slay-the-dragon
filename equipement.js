@@ -132,7 +132,6 @@ const weapons = [
         durability: 100,  
         description: "Une épée magique que seul un valeureux guerrier peut brandir. Sa puissance permet de surclasser même les dragons.",
         type : "weapon",
-        price: 100,
         action: () => { 
             strenght = baseStrenght + 66;
             strenghtText.innerText = strenght;
