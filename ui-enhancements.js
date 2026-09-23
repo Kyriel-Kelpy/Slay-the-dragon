@@ -92,6 +92,37 @@
 
         watchText(monsterHealthText, updateMonsterHealthBar);
         updateMonsterHealthBar();
+
+        // ----- Bouton de fermeture (×) pour la boutique et "Utiliser un objet" -----
+        // Ces deux panneaux voient leur contenu entièrement remplacé via
+        // innerHTML par le moteur de jeu existant (shop.js / script.js), ce
+        // qui effacerait un bouton statique posé dans le HTML. On le
+        // réinsère donc automatiquement à chaque mise à jour du contenu,
+        // sans toucher à la logique de jeu elle-même.
+        function ensureCloseButton(sectionId) {
+            const panel = document.getElementById(sectionId);
+            if (!panel) return;
+
+            function insertCloseButton() {
+                if (panel.querySelector(":scope > .modal-close")) return;
+                const btn = document.createElement("button");
+                btn.type = "button";
+                btn.className = "modal-close";
+                btn.setAttribute("aria-label", "Fermer");
+                btn.textContent = "×";
+                btn.onclick = function () {
+                    closeSection(sectionId);
+                };
+                panel.insertBefore(btn, panel.firstChild);
+            }
+
+            insertCloseButton();
+            const observer = new MutationObserver(insertCloseButton);
+            observer.observe(panel, { childList: true });
+        }
+
+        ensureCloseButton("shop");
+        ensureCloseButton("useObject");
     }
 
     if (document.readyState === "loading") {

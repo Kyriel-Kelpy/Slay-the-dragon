@@ -45,7 +45,7 @@
             <div class="topbar-row topbar-chips">
                 <span class="chip" title="Puissance">⚔ <strong id="strenght">10</strong></span>
                 <span class="chip" title="Vitesse">💨 <strong id="speed">10</strong></span>
-                <span class="chip chip-gold" title="Or">🪙 <strong id="goldText">100</strong></span>
+                <span class="chip chip-gold" title="Or"><span class="coin-icon" aria-hidden="true"></span> <strong id="goldText">100</strong></span>
             </div>
         </header>
 
@@ -84,6 +84,7 @@
 
         <!-- ===== Tiroir de navigation (bottom sheet) ===== -->
         <div id="controls" class="nav-drawer">
+            <button class="modal-close" onclick="closeSection('controls')" aria-label="Fermer">×</button>
             <div class="drawer-handle"></div>
             <h1>✧Menu✧</h1>
             <div class="nav-grid">
