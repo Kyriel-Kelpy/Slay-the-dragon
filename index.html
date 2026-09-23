@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#0a0a1f">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="icon" type="image/png" href="img/favicon.png">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+    <title>RPG - Slay the dragon</title>
+</head>
+<body>
+    <div class="app-bg" aria-hidden="true"></div>
+
+    <div class="app-shell" id="appShell">
+
+        <!-- ===== HUD (toujours visible) ===== -->
+        <header class="app-topbar">
+            <div class="topbar-row topbar-brand">
+                <span class="brand">🐉 <span class="brand-name">Slay the Dragon</span></span>
+                <select id="titleSelect" class="title-select">
+                    <option value="adventurer" selected>Aventurier</option>
+                </select>
+            </div>
+
+            <div class="topbar-row">
+                <span class="bar-tag">PV</span>
+                <div class="bar hp-bar">
+                    <div class="bar-fill" id="healthBarFill"></div>
+                    <span class="bar-text"><strong id="healthText">100</strong>/<span id="maxHealthText">100</span></span>
+                </div>
+            </div>
+
+            <div class="topbar-row">
+                <span class="bar-tag lvl-tag">Nv <strong id="lvlText">1</strong></span>
+                <div class="bar xp-bar">
+                    <div class="bar-fill" id="xpBarFill"></div>
+                    <span class="bar-text"><span id="xpText">0</span> XP</span>
+                </div>
+            </div>
+
+            <div class="topbar-row topbar-chips">
+                <span class="chip" title="Puissance">⚔ <strong id="strenght">10</strong></span>
+                <span class="chip" title="Vitesse">💨 <strong id="speed">10</strong></span>
+                <span class="chip chip-gold" title="Or">🪙 <strong id="goldText">100</strong></span>
+            </div>
+        </header>
+
+        <!-- ===== Carte de combat (affichée/masquée par le JS existant) ===== -->
+        <section id="monsterStats" class="combat-card">
+            <div class="combat-card-head">
+                <span class="combat-card-label">⚔ Adversaire</span>
+                <strong id="monsterName" class="combat-name"></strong>
+            </div>
+            <div class="bar monster-hp-bar">
+                <div class="bar-fill" id="monsterHealthBarFill"></div>
+                <span class="bar-text" id="monsterHealth"></span>
+            </div>
+        </section>
+
+        <!-- ===== Zone centrale : seule zone qui peut défiler ===== -->
+        <main class="app-main" id="appMain">
+            <div id="text" class="story-panel">
+                <div id="storyText" class="story-text"></div>
+                <button id="nextBtn" class="story-next">Suivant ▸</button>
+                <div id="choices" class="story-choices"></div>
+            </div>
+        </main>
+
+        <!-- ===== Barre basse : actions de combat + accès menu ===== -->
+        <footer class="app-bottombar">
+            <div id="actions" class="combat-actions">
+                <button id="button1">⚔ Attaquer</button>
+                <button id="button2">🎒 Objet / Sort</button>
+                <button id="button3">🏃 Fuir</button>
+            </div>
+            <nav class="app-nav">
+                <button id="afficheMenu" class="nav-toggle">☰ Menu</button>
+            </nav>
+        </footer>
+
+        <!-- ===== Tiroir de navigation (bottom sheet) ===== -->
+        <div id="controls" class="nav-drawer">
+            <div class="drawer-handle"></div>
+            <h1>✧Menu✧</h1>
+            <div class="nav-grid">
+                <button id="save">💾 Sauvegarder</button>
+                <button id="load">📂 Charger</button>
+                <button id="menu1">🗡 Équipement</button>
+                <button id="menu2">🎒 Inventaire</button>
+                <button id="menu3">🏆 Succès</button>
+                <button id="menu4">📖 Bestiaire</button>
+            </div>
+        </div>
+
+        <!-- ===== Panneaux modaux (équipement / inventaire / succès / bestiaire) ===== -->
+        <div id="equip" class="option-menu">
+            <div class="modal-card">
+                <button class="modal-close" onclick="closeSection('equip')" aria-label="Fermer">×</button>
+                <h1>✧Équipement✧</h1>
+                <div class="modal-body">
+                    <div class="equip-option">
+                        <label for="arme">Arme :</label>
+                        <select id="arme" onchange="equipItem('weapon')">
+                            <option value="" disabled selected>Choisir une arme</option>
+                        </select>
+                    </div>
+                    <div class="equip-option">
+                        <label for="protection">Protection :</label>
+                        <select id="protection" onchange="equipItem('protection')">
+                            <option value="" disabled selected>Choisir une protection</option>
+                        </select>
+                    </div>
+                    <div class="equip-option">
+                        <label for="accessoire">Accessoire :</label>
+                        <select id="accessoire" onchange="equipItem('accessory')">
+                            <option value="" disabled selected>Choisir un accessoire</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="inventory" class="option-menu">
+            <div class="modal-card">
+                <button class="modal-close" onclick="closeSection('inventory')" aria-label="Fermer">×</button>
+                <h1>✧Inventaire✧</h1>
+                <ul id="inventory-list" class="modal-body"></ul>
+            </div>
+        </div>
+
+        <div id="trophies" class="option-menu">
+            <div class="modal-card">
+                <button class="modal-close" onclick="closeSection('trophies')" aria-label="Fermer">×</button>
+                <h1>✧Achèvements✧</h1>
+                <div id="trophies-list" class="modal-body"></div>
+            </div>
+        </div>
+
+        <div id="bestiaire" class="option-menu">
+            <div class="modal-card">
+                <button class="modal-close" onclick="closeSection('bestiaire')" aria-label="Fermer">×</button>
+                <h1>✧Bestiaire✧</h1>
+                <div id="monster-list" class="modal-body"></div>
+            </div>
+        </div>
+
+        <!-- ===== Boutique / Utiliser un objet (bottom sheets) ===== -->
+        <div id="shop" class="sheet"></div>
+
+        <div id="useObject" class="sheet"></div>
+
+        <!-- ===== Dialogues ===== -->
+        <div id="levelUpDialog" class="dialog hidden">
+            <div class="dialog-content">
+                <h2>🔥 Félicitations ! 🔥</h2>
+                <p id="levelUpMessage"></p>
+                <button onclick="closeLevelUpDialog()">OK</button>
+            </div>
+        </div>
+
+        <div id="brokenWeapon" class="dialog hidden">
+            <div class="dialog-content">
+                <h2>Oops...</h2>
+                <p id="brokenWeaponMsg"></p>
+                <button onclick="closeBroken()">OK</button>
+            </div>
+        </div>
+
+        <div id="event" class="dialog hidden">
+            <div class="dialog-content">
+                <h2>✨Checkpoint✨</h2>
+                <p id="eventMsg"></p>
+                <button onclick="closeEvent()">OK</button>
+            </div>
+        </div>
+
+        <div id="trophie" class="dialog hidden">
+            <div class="dialog-content">
+                <h2>🏆 Félicitations ! 🏆</h2>
+                <p id="trophieMsg"></p>
+                <button onclick="closeTrophie()">OK</button>
+            </div>
+        </div>
+
+        <div id="loading-screen">
+            <h1 class="game-title">Slay the Dragon</h1>
+            <p class="creator">par Nightraid</p>
+            <div class="loader"></div>
+            <p>Chargement en cours...</p>
+        </div>
+
+    </div>
+
+    <script src="animation.js"></script>
+    <script src="variables.js" defer></script>
+    <script src="monsters.js" defer></script>
+    <script src="equipement.js" defer></script>
+    <script src="shop.js" defer></script>
+    <script src="butins.js" defer></script>
+    <script src="events.js" defer></script>
+    <script src="script.js" defer></script>
+    <script src="success.js" defer></script>
+    <script src="save_load.js" defer></script>
+    <script src="ui-enhancements.js" defer></script>
+</body>
+</html>

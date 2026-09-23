@@ -1,0 +1,818 @@
+/* =========================================================
+   Slay the Dragon — app-shell RPG
+   Aucune barre de défilement de page : tout est confiné dans
+   .app-shell (100dvh). Seule .app-main défile en interne,
+   avec sa scrollbar masquée.
+   ========================================================= */
+
+:root {
+    --color-bg: #05050f;
+    --color-panel: rgba(14, 15, 30, 0.92);
+    --color-panel-soft: rgba(22, 24, 42, 0.92);
+    --color-border: #c9a24a;
+    --color-border-soft: rgba(201, 162, 74, 0.35);
+    --color-text: #f2e9d8;
+    --color-text-dim: #b7ad9a;
+    --color-accent: #c9a24a;
+    --color-accent-light: #ffd98a;
+
+    --color-hp-a: #ff8a8a;
+    --color-hp-b: #a30d0d;
+    --color-xp-a: #8fd8ff;
+    --color-xp-b: #3b6fd6;
+    --color-danger: #8c0f0f;
+
+    --font-heading: 'Cinzel', serif;
+    --radius: 14px;
+    --radius-sm: 8px;
+    --shadow-panel: 0 10px 30px rgba(0, 0, 0, 0.55);
+    --shadow-inset: inset 0 1px 3px rgba(0, 0, 0, 0.65);
+
+    --topbar-h: auto;
+    --bottombar-h: auto;
+    --vh: 1vh; /* recalculé en JS pour les vieux mobiles */
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    overscroll-behavior: none;
+    background: var(--color-bg);
+}
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: calc(var(--vh) * 100);
+    height: 100dvh;
+    overflow: hidden;
+    font-family: var(--font-heading);
+    color: var(--color-text);
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Fond décoratif plein écran, flouté, derrière le cadre de l'app */
+.app-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background-image:
+        linear-gradient(180deg, rgba(2, 2, 8, 0.78), rgba(2, 2, 8, 0.9)),
+        url('img/dragon.webp');
+    background-size: cover;
+    background-position: center;
+    filter: blur(2px) saturate(1.05);
+    transform: scale(1.03);
+}
+
+/* ---------- App shell ---------- */
+
+.app-shell {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: calc(var(--vh) * 100);
+    height: 100dvh;
+    max-width: 100%;
+    overflow: hidden;
+    background: linear-gradient(180deg, rgba(8, 8, 18, 0.55), rgba(4, 4, 10, 0.75));
+    isolation: isolate;
+}
+
+h1 {
+    font-size: 17px;
+    margin: 0 0 10px 0;
+    text-align: center;
+    color: var(--color-accent-light);
+    letter-spacing: 2px;
+    text-shadow: 0 0 10px rgba(201, 162, 74, 0.45), 0 2px 2px rgba(0, 0, 0, 0.6);
+}
+
+/* ---------- Boutons ---------- */
+
+button {
+    cursor: pointer;
+    color: #1a1206;
+    background-color: var(--color-accent);
+    background-image: linear-gradient(180deg, #f0cd77, var(--color-accent));
+    border: 1px solid #8a6a24;
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    font-size: 15px;
+    font-family: var(--font-heading);
+    font-weight: bold;
+    letter-spacing: 0.4px;
+    box-shadow: 0 3px 0 #6e5119, 0 6px 14px rgba(0, 0, 0, 0.35);
+    transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+}
+
+button:hover {
+    filter: brightness(1.08);
+    transform: translateY(-1px);
+}
+
+button:active {
+    transform: translateY(1px);
+    box-shadow: 0 1px 0 #6e5119, 0 3px 8px rgba(0, 0, 0, 0.4);
+}
+
+select {
+    font-family: var(--font-heading);
+    background: #14162a;
+    color: var(--color-text);
+    border: 1px solid var(--color-border-soft);
+    border-radius: var(--radius-sm);
+    padding: 6px 10px;
+}
+
+/* ---------- Barre haute (HUD) ---------- */
+
+.app-topbar {
+    flex-shrink: 0;
+    background: var(--color-panel);
+    border-bottom: 1px solid var(--color-border-soft);
+    padding: calc(env(safe-area-inset-top, 0px) + 8px) 12px 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+    z-index: 20;
+}
+
+.topbar-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.topbar-brand {
+    justify-content: space-between;
+}
+
+.brand {
+    font-size: 14px;
+    color: var(--color-accent-light);
+    letter-spacing: 1px;
+    white-space: nowrap;
+}
+
+.brand-name {
+    display: inline;
+}
+
+.title-select {
+    font-size: 12px;
+    padding: 4px 8px;
+    max-width: 45%;
+}
+
+.bar-tag {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--color-text-dim);
+    flex-shrink: 0;
+    width: 46px;
+}
+
+.lvl-tag {
+    color: var(--color-accent-light);
+    text-transform: none;
+    width: 52px;
+}
+
+.lvl-tag strong {
+    color: var(--color-accent-light);
+}
+
+.bar {
+    position: relative;
+    flex: 1 1 auto;
+    height: 16px;
+    background: rgba(0, 0, 0, 0.55);
+    border: 1px solid var(--color-border-soft);
+    border-radius: 999px;
+    overflow: hidden;
+    box-shadow: var(--shadow-inset);
+}
+
+.bar-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 999px;
+    transition: width 0.45s ease;
+}
+
+.hp-bar .bar-fill {
+    background: linear-gradient(90deg, var(--color-hp-a), var(--color-hp-b));
+    box-shadow: 0 0 8px rgba(255, 60, 60, 0.55);
+}
+
+.xp-bar {
+    height: 10px;
+}
+
+.xp-bar .bar-fill {
+    background: linear-gradient(90deg, var(--color-xp-a), var(--color-xp-b));
+    box-shadow: 0 0 8px rgba(90, 150, 255, 0.55);
+}
+
+.monster-hp-bar .bar-fill {
+    background: linear-gradient(90deg, #ffb35c, var(--color-danger));
+    box-shadow: 0 0 8px rgba(255, 90, 20, 0.55);
+}
+
+.bar-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    line-height: 1;
+    color: var(--color-text);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+    white-space: nowrap;
+}
+
+.xp-bar .bar-text {
+    font-size: 8px;
+}
+
+.topbar-chips {
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.chip {
+    font-size: 12px;
+    background: rgba(0, 0, 0, 0.28);
+    border: 1px solid var(--color-border-soft);
+    border-radius: 999px;
+    padding: 3px 10px;
+    color: var(--color-text-dim);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.chip strong {
+    color: var(--color-accent-light);
+}
+
+.chip-gold {
+    margin-left: auto;
+}
+
+/* ---------- Carte de combat ---------- */
+
+.combat-card {
+    flex-shrink: 0;
+    display: none;
+    flex-direction: column;
+    gap: 6px;
+    padding: 10px 12px;
+    background: linear-gradient(180deg, rgba(140, 15, 15, 0.5), rgba(30, 6, 6, 0.7));
+    border-bottom: 1px solid rgba(255, 120, 90, 0.45);
+    z-index: 15;
+}
+
+.combat-card[style*="flex"] {
+    display: flex !important;
+}
+
+.combat-card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.combat-card-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #ffb35c;
+}
+
+.combat-name {
+    color: var(--color-accent-light);
+    font-size: 15px;
+}
+
+/* ---------- Zone centrale (seule zone scrollable) ---------- */
+
+.app-main {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 14px 12px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 14px, #000 calc(100% - 14px), transparent 100%);
+    mask-image: linear-gradient(180deg, transparent 0, #000 14px, #000 calc(100% - 14px), transparent 100%);
+}
+
+.app-main::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    display: none;
+}
+
+.story-panel {
+    color: var(--color-text);
+    line-height: 1.55;
+    font-size: 16px;
+}
+
+.story-text p {
+    margin: 0 0 10px 0;
+}
+
+.story-next {
+    display: block;
+    margin: 10px 0;
+}
+
+.story-choices {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+/* ---------- Barre basse ---------- */
+
+.app-bottombar {
+    flex-shrink: 0;
+    background: var(--color-panel);
+    border-top: 1px solid var(--color-border-soft);
+    padding: 8px 12px calc(env(safe-area-inset-bottom, 0px) + 8px);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.35);
+    z-index: 20;
+}
+
+.combat-actions {
+    display: none;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.combat-actions[style*="flex"] {
+    display: flex !important;
+}
+
+.combat-actions button {
+    flex: 1 1 auto;
+    min-width: 100px;
+    margin: 0;
+}
+
+.app-nav {
+    display: flex;
+}
+
+.nav-toggle {
+    width: 100%;
+    margin: 0;
+    background-image: linear-gradient(180deg, #2c2e46, #14162a);
+    color: var(--color-accent-light);
+    border: 1px solid var(--color-border-soft);
+    box-shadow: none;
+}
+
+/* ---------- Tiroir de navigation (bottom sheet) ---------- */
+
+.nav-drawer {
+    display: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 40;
+    background: var(--color-panel);
+    border-top: 1px solid var(--color-border);
+    border-radius: 18px 18px 0 0;
+    padding: 10px 16px calc(env(safe-area-inset-bottom, 0px) + 16px);
+    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.55);
+    animation: sheetUp 0.22s ease;
+}
+
+.nav-drawer[style*="block"] {
+    display: block !important;
+}
+
+.drawer-handle {
+    width: 40px;
+    height: 4px;
+    border-radius: 999px;
+    background: var(--color-border-soft);
+    margin: 2px auto 10px;
+}
+
+.nav-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.nav-grid button {
+    margin: 0;
+}
+
+/* ---------- Panneaux modaux (équipement / inventaire / succès / bestiaire) ---------- */
+
+.option-menu {
+    display: none;
+    position: absolute;
+    inset: 0;
+    z-index: 50;
+    background: rgba(3, 3, 8, 0.8);
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+}
+
+.option-menu[style*="block"] {
+    display: flex !important;
+}
+
+.modal-card {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    max-height: 85%;
+    background: linear-gradient(180deg, #1c1a2e, #0e0d1a);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: 20px 16px 16px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(201, 162, 74, 0.15);
+    display: flex;
+    flex-direction: column;
+    animation: fadeIn 0.25s ease;
+}
+
+.modal-body {
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding-right: 2px;
+}
+
+.modal-body::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    display: none;
+}
+
+.modal-close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    line-height: 1;
+    font-size: 18px;
+    border-radius: 50%;
+    box-shadow: none;
+}
+
+#equip select {
+    width: 60%;
+}
+
+.equip-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding: 8px 10px;
+    background: rgba(0, 0, 0, 0.22);
+    border-radius: var(--radius-sm);
+}
+
+/* Inventaire, bestiaire, succès : grilles de cartes */
+
+#inventory-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+}
+
+#inventory-list li {
+    background: rgba(0, 0, 0, 0.28);
+    border: 1px solid var(--color-border-soft);
+    border-radius: var(--radius-sm);
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+#inventory-list li strong {
+    color: var(--color-accent-light);
+}
+
+#inventory-list li p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--color-text-dim);
+}
+
+#monster-list,
+#trophies-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+}
+
+.monster-item,
+.trophy-item {
+    margin-bottom: 0;
+    padding: 12px;
+    border: 1px solid var(--color-border-soft);
+    border-radius: var(--radius-sm);
+    background: rgba(255, 255, 255, 0.05);
+    transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.monster-item:hover,
+.trophy-item:hover {
+    transform: translateY(-2px);
+    border-color: var(--color-border);
+}
+
+.trophy-item strong {
+    font-size: 1.1em;
+    color: var(--color-accent-light);
+}
+
+.trophy-item em {
+    font-size: 0.9em;
+    color: var(--color-text);
+}
+
+/* ---------- Boutique / Utiliser un objet (bottom sheets) ---------- */
+
+.sheet {
+    display: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 45;
+    max-height: 78%;
+    background: var(--color-panel);
+    border-top: 1px solid var(--color-border);
+    border-radius: 18px 18px 0 0;
+    padding: 14px 12px calc(env(safe-area-inset-bottom, 0px) + 14px);
+    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.55);
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    animation: sheetUp 0.22s ease;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 10px;
+    align-content: start;
+}
+
+.sheet::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    display: none;
+}
+
+.sheet[style*="flex"] {
+    display: grid !important;
+}
+
+.sheet::before {
+    content: "";
+    display: block;
+    grid-column: 1 / -1;
+    width: 40px;
+    height: 4px;
+    border-radius: 999px;
+    background: var(--color-border-soft);
+    margin: 0 auto 6px;
+}
+
+.shop-item,
+.use-item,
+.sell-item {
+    background: rgba(0, 0, 0, 0.28);
+    border: 1px solid var(--color-border-soft);
+    border-radius: var(--radius-sm);
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.shop-item:hover,
+.use-item:hover,
+.sell-item:hover {
+    transform: translateY(-2px);
+    border-color: var(--color-border);
+}
+
+.shop-item h3,
+.use-item h3,
+.sell-item h3 {
+    margin: 0;
+    color: var(--color-accent-light);
+    font-size: 15px;
+}
+
+.shop-item p,
+.use-item p,
+.sell-item p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--color-text-dim);
+}
+
+.shop-item ul {
+    margin: 4px 0;
+    padding-left: 18px;
+    font-size: 12px;
+}
+
+.buy-message,
+.use-message,
+.sell-message {
+    color: var(--color-accent-light);
+    font-size: 12px;
+    min-height: 1em;
+}
+
+.no-items-message {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: var(--color-text-dim);
+}
+
+@keyframes sheetUp {
+    from {
+        transform: translateY(16px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* ---------- Dialogues ---------- */
+
+.dialog {
+    position: absolute;
+    inset: 0;
+    z-index: 60;
+    background-color: rgba(0, 0, 0, 0.78);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 16px;
+}
+
+.dialog-content {
+    background: linear-gradient(180deg, #1c1a2e, #0e0d1a);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    padding: 22px;
+    border-radius: var(--radius);
+    text-align: center;
+    max-width: 380px;
+    max-height: 80%;
+    overflow-y: auto;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(201, 162, 74, 0.15);
+    animation: fadeIn 0.3s ease;
+}
+
+.dialog-content h2 {
+    margin-top: 0;
+    color: var(--color-accent-light);
+    text-shadow: 0 0 10px rgba(201, 162, 74, 0.4);
+}
+
+.dialog-content button {
+    margin-top: 10px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.94);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* ---------- Écran de chargement ---------- */
+
+#loading-screen {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, #14101f 0%, #050308 80%);
+    color: var(--color-text);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    font-family: var(--font-heading);
+}
+
+.game-title {
+    font-size: 2.2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    letter-spacing: 3px;
+    text-shadow: 0 0 20px rgba(255, 90, 20, 0.6), 2px 2px 4px rgba(0, 0, 0, 0.6);
+    color: #ff7a3d;
+}
+
+.creator {
+    font-size: 1.05rem;
+    font-style: italic;
+    margin-bottom: 2rem;
+    color: var(--color-accent-light);
+}
+
+.loader {
+    border: 4px solid rgba(255, 255, 255, 0.15);
+    border-top: 4px solid var(--color-accent);
+    border-radius: 50%;
+    width: 46px;
+    height: 46px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+#loading-screen p {
+    font-size: 0.95rem;
+    margin: 0;
+    text-align: center;
+}
+
+/* ---------- Cadre "app" sur grands écrans ---------- */
+
+@media (min-width: 701px) {
+    body {
+        padding: 24px;
+    }
+
+    .app-shell {
+        width: min(480px, 100%);
+        height: min(calc(var(--vh) * 100), 880px);
+        height: min(100dvh, 880px);
+        border-radius: 26px;
+        border: 1px solid var(--color-border-soft);
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(201, 162, 74, 0.12);
+    }
+}
+
+@media (max-width: 700px) {
+    .app-shell {
+        border-radius: 0;
+    }
+}
+
+@media (max-width: 380px) {
+    .nav-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .combat-actions button {
+        min-width: 100%;
+    }
+}
