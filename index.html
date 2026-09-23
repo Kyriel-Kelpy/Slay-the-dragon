@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="img/favicon.png">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+    <title>RPG - Slay the dragon</title>
+</head>
+<body>
+    <div id="control">
+        <button id="afficheMenu">Afficher/Maquer le menu</button>
+        <div id="controls">
+            <div id="options">
+                <h1>✧Menu✧</h1>
+                <button id="save">Sauvegarder</button>
+                <button id="load">Charger</button>
+                <button id="menu1">Équipement</button>
+                <button id="menu2">Consulter l'inventaire</button>
+                <button id="menu3">Achèvements</button>
+                <button id="menu4">Bestiaire</button>
+            </div>
+            
+            <div id="equip" class="option-menu">
+                <h1>✧Équipement✧</h1>
+                <div class="equip-option">
+                    <label for="arme">Arme :</label>
+                    <select id="arme" onchange="equipItem('weapon')">
+                        <option value="" disabled selected>Choisir une arme</option>
+                    </select>
+                </div>
+                <div class="equip-option">
+                    <label for="protection">Protection :</label>
+                    <select id="protection" onchange="equipItem('protection')">
+                        <option value="" disabled selected>Choisir une protection</option>
+                    </select>
+                </div>
+                <div class="equip-option">
+                    <label for="accessoire">Accessoire :</label>
+                    <select id="accessoire" onchange="equipItem('accessory')">
+                        <option value="" disabled selected>Choisir un accessoire</option>
+                    </select>
+                </div>
+                <button id="close" onclick="closeSection('equip')">Fermer</button>
+            </div>
+
+            <div id="inventory" class="option-menu">
+                <h1>✧Inventaire✧</h1>
+                <ul id="inventory-list"></ul>
+                <button id="close" onclick="closeSection('inventory')">Fermer</button>
+            </div>
+
+            <div id="trophies" class="option-menu">
+                <h1>✧Achèvements✧</h1>
+                <button id="close" onclick="closeSection('trophies')">Fermer</button>
+                <div id="trophies-list"></div>
+            </div>
+
+            <div id="bestiaire" class="option-menu">
+                <h1>✧Bestiaire✧</h1>
+                <button id="close" onclick="closeSection('bestiaire')">Fermer</button>
+                <div id="monster-list"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="game">
+        <div id="stats">
+            <h1>✧Stats✧</h1>
+            <div class="stat0">
+                <label for="titleSelect">Titre :</label>
+                <select id="titleSelect">
+                    <option value="adventurer" selected>Aventurier</option>
+                </select>
+            </div>
+            <div class="stat-grid">
+                <div class="stat-block">
+                    <span class="stat-label">Niveau</span>
+                    <span class="stat-value"><strong id="lvlText">1</strong></span>
+                </div>
+                <div class="stat-block">
+                    <span class="stat-label">Pièces d'or</span>
+                    <span class="stat-value"><strong id="goldText">100</strong> 🪙</span>
+                </div>
+                <div class="stat-block stat-block--wide">
+                    <span class="stat-label">XP</span>
+                    <div class="bar xp-bar"><div class="bar-fill" id="xpBarFill"></div></div>
+                    <span class="stat-value" id="xpText">0</span>
+                </div>
+                <div class="stat-block stat-block--wide">
+                    <span class="stat-label">Santé</span>
+                    <div class="bar hp-bar"><div class="bar-fill" id="healthBarFill"></div></div>
+                    <span class="stat-value"><strong id="healthText">100</strong>/<span id="maxHealthText">100</span></span>
+                </div>
+                <div class="stat-block">
+                    <span class="stat-label">Puissance</span>
+                    <span class="stat-value"><strong id="strenght">10</strong></span>
+                </div>
+                <div class="stat-block">
+                    <span class="stat-label">Vitesse</span>
+                    <span class="stat-value"><strong id="speed">10</strong></span>
+                </div>
+            </div>
+        </div>
+        <div id="text">
+            <h1>✧Histoire✧</h1>
+            <div id="storyText"></div>
+            <br>
+            <button id="nextBtn">Suivant</button>
+            <div id="choices"></div>
+        </div>
+
+        <div id="shop">
+        </div>
+
+        <div id="monsterStats">
+            <h1>✧Adversaire✧</h1>
+            <span class="stat">Nom : <strong><span id="monsterName"></span></strong></span>
+            <div class="bar monster-hp-bar"><div class="bar-fill" id="monsterHealthBarFill"></div></div>
+            <span class="stat">Santé : <strong><span id="monsterHealth"></span></strong></span>
+        </div>
+        <div id="actions">
+            <h1>✧Actions✧</h1>
+            <button id="button1">Attaquer</button>
+            <button id="button2">Utiliser un objet ou un sort</button>
+            <button id="button3">Fuir</button>
+        </div>
+
+        <div id="useObject">
+
+        </div>
+    </div>
+
+    <div id="levelUpDialog" class="dialog hidden">
+        <div class="dialog-content">
+            <h2>🔥 Félicitations ! 🔥</h2>
+            <p id="levelUpMessage"></p>
+            <button onclick="closeLevelUpDialog()">OK</button>
+        </div>
+    </div>
+
+    <div id="brokenWeapon" class="dialog hidden">
+        <div class="dialog-content">
+            <h2>Oops...</h2>
+            <p id="brokenWeaponMsg"></p>
+            <button onclick="closeBroken()">OK</button>
+        </div>
+    </div>
+
+    <div id="event" class="dialog hidden">
+        <div class="dialog-content">
+            <h2>✨Checkpoint✨</h2>
+            <p id="eventMsg"></p>
+            <button onclick="closeEvent()">OK</button>
+        </div>
+    </div>
+
+
+    <div id="trophie" class="dialog hidden">
+        <div class="dialog-content">
+            <h2>🏆 Félicitations ! 🏆</h2>
+            <p id="trophieMsg"></p>
+            <button onclick="closeTrophie()">OK</button>
+        </div>
+    </div>
+
+
+    <div id="loading-screen">
+        <h1 class="game-title">Slay the Dragon</h1>
+        <p class="creator">par Nightraid</p>
+        <div class="loader"></div>
+        <p>Chargement en cours...</p>
+    </div>
+
+    <script src="animation.js"></script>
+    <script src="variables.js" defer></script>
+    <script src="monsters.js" defer></script>
+    <script src="equipement.js" defer></script>
+    <script src="shop.js" defer></script>
+    <script src="butins.js" defer></script>
+    <script src="events.js" defer></script>
+    <script src="script.js" defer></script>
+    <script src="success.js" defer></script>
+    <script src="save_load.js" defer></script>
+    <script src="ui-enhancements.js" defer></script>
+</body>
+</html>

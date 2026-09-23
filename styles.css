@@ -1,0 +1,642 @@
+/* =========================================================
+   Slay the Dragon — thème RPG moderne
+   ========================================================= */
+
+:root {
+    --color-bg: #05050f;
+    --color-panel: rgba(14, 15, 30, 0.86);
+    --color-panel-soft: rgba(24, 26, 46, 0.85);
+    --color-border: #c9a24a;
+    --color-border-soft: rgba(201, 162, 74, 0.35);
+    --color-text: #f2e9d8;
+    --color-text-dim: #b7ad9a;
+    --color-accent: #c9a24a;
+    --color-accent-light: #ffd98a;
+
+    --color-hp-a: #ff8a8a;
+    --color-hp-b: #a30d0d;
+    --color-xp-a: #8fd8ff;
+    --color-xp-b: #3b6fd6;
+    --color-danger: #8c0f0f;
+
+    --font-heading: 'Cinzel', serif;
+    --radius: 12px;
+    --radius-sm: 7px;
+    --shadow-panel: 0 10px 30px rgba(0, 0, 0, 0.55);
+    --shadow-inset: inset 0 1px 3px rgba(0, 0, 0, 0.65);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--color-bg);
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    margin: 0;
+    gap: 10px;
+    font-size: 18px;
+    background-image:
+        linear-gradient(180deg, rgba(3, 3, 10, 0.72), rgba(3, 3, 10, 0.85)),
+        url('img/dragon.webp');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    font-family: var(--font-heading);
+    color: var(--color-text);
+}
+
+h1 {
+    font-size: 19px;
+    margin: 0 0 12px 0;
+    text-align: center;
+    color: var(--color-accent-light);
+    letter-spacing: 2px;
+    text-shadow: 0 0 10px rgba(201, 162, 74, 0.45), 0 2px 2px rgba(0, 0, 0, 0.6);
+    position: relative;
+    padding-bottom: 8px;
+}
+
+h1::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--color-border), transparent);
+}
+
+/* ---------- Panneaux principaux ---------- */
+
+#game, #control {
+    width: 46%;
+    min-width: 320px;
+    height: fit-content;
+    background: var(--color-panel);
+    border: 1px solid var(--color-border-soft);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-panel);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    color: var(--color-text);
+    padding: 16px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+#afficheMenu {
+    width: 100%;
+}
+
+/* ---------- Boutons ---------- */
+
+button {
+    cursor: pointer;
+    color: #1a1206;
+    background-color: var(--color-accent);
+    background-image: linear-gradient(180deg, #f0cd77, var(--color-accent));
+    border: 1px solid #8a6a24;
+    border-radius: var(--radius-sm);
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 9px 14px;
+    font-size: 16px;
+    font-family: var(--font-heading);
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    box-shadow: 0 3px 0 #6e5119, 0 6px 14px rgba(0, 0, 0, 0.4);
+    transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+}
+
+button:hover {
+    filter: brightness(1.08);
+    transform: translateY(-1px);
+}
+
+button:active {
+    transform: translateY(1px);
+    box-shadow: 0 1px 0 #6e5119, 0 3px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* ---------- Menu latéral ---------- */
+
+#options {
+    border: 1px solid var(--color-border-soft);
+    border-radius: var(--radius);
+    background: var(--color-panel-soft);
+    color: var(--color-text);
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+}
+
+.option-menu {
+    background: var(--color-panel-soft);
+    border: 1px solid var(--color-border-soft);
+    border-radius: var(--radius);
+    color: var(--color-text);
+    padding: 14px;
+    margin-bottom: 10px;
+}
+
+#equip, #inventory, #trophies, #bestiaire {
+    display: none;
+}
+
+#equip label {
+    margin-right: 10px;
+    color: var(--color-accent-light);
+}
+
+#equip select,
+#titleSelect {
+    width: 60%;
+    padding: 8px 12px;
+    font-size: 16px;
+    font-family: var(--font-heading);
+    border: 1px solid var(--color-border-soft);
+    border-radius: var(--radius-sm);
+    background: #14162a;
+    color: var(--color-text);
+}
+
+#titleSelect {
+    width: 65%;
+}
+
+.equip-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding: 8px 10px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: var(--radius-sm);
+}
+
+.stat0 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 8px 10px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: var(--radius-sm);
+}
+
+/* ---------- Stats & jauges ---------- */
+
+#stats {
+    border: 1px solid var(--color-border-soft);
+    border-radius: var(--radius);
+    background: var(--color-panel-soft);
+    color: var(--color-text);
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 14px;
+}
+
+.stat-block {
+    background: rgba(0, 0, 0, 0.22);
+    border: 1px solid var(--color-border-soft);
+    border-radius: var(--radius-sm);
+    padding: 8px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.stat-block--wide {
+    grid-column: 1 / -1;
+}
+
+.stat-label {
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--color-text-dim);
+}
+
+.stat-value {
+    font-size: 17px;
+    color: var(--color-accent-light);
+}
+
+.stat-value strong {
+    color: var(--color-accent-light);
+}
+
+.stat {
+    padding-right: 10px;
+}
+
+.bar {
+    position: relative;
+    width: 100%;
+    height: 13px;
+    background: rgba(0, 0, 0, 0.55);
+    border: 1px solid var(--color-border-soft);
+    border-radius: 999px;
+    overflow: hidden;
+    box-shadow: var(--shadow-inset);
+}
+
+.bar-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 999px;
+    transition: width 0.45s ease;
+}
+
+.hp-bar .bar-fill {
+    background: linear-gradient(90deg, var(--color-hp-a), var(--color-hp-b));
+    box-shadow: 0 0 8px rgba(255, 60, 60, 0.55);
+}
+
+.xp-bar .bar-fill {
+    background: linear-gradient(90deg, var(--color-xp-a), var(--color-xp-b));
+    box-shadow: 0 0 8px rgba(90, 150, 255, 0.55);
+}
+
+.monster-hp-bar .bar-fill {
+    background: linear-gradient(90deg, #ffb35c, var(--color-danger));
+    box-shadow: 0 0 8px rgba(255, 90, 20, 0.55);
+}
+
+/* ---------- Histoire / choix ---------- */
+
+#text {
+    background: var(--color-panel-soft);
+    border: 1px solid var(--color-border-soft);
+    border-radius: var(--radius);
+    color: var(--color-text);
+    padding: 14px;
+    height: 100%;
+    line-height: 1.5;
+}
+
+#choices {
+    color: var(--color-text);
+    padding: 5px 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+/* ---------- Actions de combat / objets ---------- */
+
+#actions {
+    border: 1px solid var(--color-border-soft);
+    border-radius: var(--radius);
+    background: var(--color-panel-soft);
+    color: var(--color-text);
+    padding: 14px;
+    display: none;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+#actions h1 {
+    width: 100%;
+}
+
+#actions button {
+    flex: 1 1 auto;
+    min-width: 140px;
+}
+
+#shop, #useObject {
+    border: 1px solid var(--color-border-soft);
+    border-radius: var(--radius);
+    background: var(--color-panel-soft);
+    color: var(--color-text);
+    padding: 14px;
+    gap: 10px;
+}
+
+#shop {
+    display: none;
+}
+#useObject {
+    display: none;
+}
+
+#shop[style*="flex"],
+#useObject[style*="flex"] {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    align-content: start;
+}
+
+.shop-item,
+.use-item {
+    background: rgba(0, 0, 0, 0.28);
+    border: 1px solid var(--color-border-soft);
+    border-radius: var(--radius-sm);
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.shop-item:hover,
+.use-item:hover {
+    transform: translateY(-2px);
+    border-color: var(--color-border);
+}
+
+.shop-item h3,
+.use-item h3 {
+    margin: 0;
+    color: var(--color-accent-light);
+    font-size: 16px;
+}
+
+.shop-item p,
+.use-item p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--color-text-dim);
+}
+
+.shop-item ul {
+    margin: 4px 0;
+    padding-left: 18px;
+    font-size: 13px;
+}
+
+.buy-message,
+.use-message {
+    color: var(--color-accent-light);
+    font-size: 13px;
+    min-height: 1em;
+}
+
+.no-items-message {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: var(--color-text-dim);
+}
+
+/* ---------- Adversaire ---------- */
+
+#monsterStats {
+    border: 1px solid rgba(255, 120, 90, 0.5);
+    border-radius: var(--radius);
+    padding: 14px;
+    color: var(--color-text);
+    background: linear-gradient(180deg, rgba(140, 15, 15, 0.55), rgba(30, 6, 6, 0.75));
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+}
+
+#monsterStats h1 {
+    color: #ffb35c;
+    text-shadow: 0 0 10px rgba(255, 90, 20, 0.5);
+}
+
+/* ---------- Inventaire ---------- */
+
+#inventory-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+}
+
+#inventory-list li {
+    background: rgba(0, 0, 0, 0.28);
+    border: 1px solid var(--color-border-soft);
+    border-radius: var(--radius-sm);
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+#inventory-list li strong {
+    color: var(--color-accent-light);
+}
+
+#inventory-list li p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--color-text-dim);
+}
+
+/* ---------- Bestiaire & Succès ---------- */
+
+#monster-list,
+#trophies-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+}
+
+.monster-item,
+.trophy-item {
+    margin-bottom: 0;
+    padding: 12px;
+    border: 1px solid var(--color-border-soft);
+    border-radius: var(--radius-sm);
+    background: rgba(255, 255, 255, 0.05);
+    transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.monster-item:hover,
+.trophy-item:hover {
+    transform: translateY(-2px);
+    border-color: var(--color-border);
+}
+
+.trophy-item strong {
+    font-size: 1.1em;
+    color: var(--color-accent-light);
+}
+
+.trophy-item em {
+    font-size: 0.9em;
+    color: var(--color-text);
+}
+
+/* ---------- Dialogues modaux ---------- */
+
+.dialog {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.75);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 16px;
+}
+
+.dialog-content {
+    background: linear-gradient(180deg, #1c1a2e, #0e0d1a);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    padding: 24px;
+    border-radius: var(--radius);
+    text-align: center;
+    max-width: 420px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(201, 162, 74, 0.15);
+    animation: fadeIn 0.3s ease;
+}
+
+.dialog-content h2 {
+    margin-top: 0;
+    color: var(--color-accent-light);
+    text-shadow: 0 0 10px rgba(201, 162, 74, 0.4);
+}
+
+.dialog-content button {
+    margin-top: 10px;
+}
+
+.hidden {
+    display: none;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+#levelUpDialog, #brokenWeapon, #event, #trophie {
+    z-index: 1000;
+}
+
+/* ---------- Écran de chargement ---------- */
+
+#loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, #14101f 0%, #050308 80%);
+    color: var(--color-text);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    font-family: var(--font-heading);
+}
+
+.game-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    letter-spacing: 3px;
+    text-shadow: 0 0 20px rgba(255, 90, 20, 0.6), 2px 2px 4px rgba(0, 0, 0, 0.6);
+    color: #ff7a3d;
+}
+
+.creator {
+    font-size: 1.1rem;
+    font-style: italic;
+    margin-bottom: 2rem;
+    color: var(--color-accent-light);
+}
+
+.loader {
+    border: 4px solid rgba(255, 255, 255, 0.15);
+    border-top: 4px solid var(--color-accent);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+#loading-screen p {
+    font-size: 1rem;
+    margin: 0;
+    text-align: center;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 900px) {
+    #game, #control {
+        width: 90%;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+    }
+
+    #game, #control {
+        width: 94%;
+        height: auto;
+        margin-top: 12px;
+        margin-bottom: 12px;
+    }
+
+    #text {
+        height: auto;
+    }
+
+    .stat-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    #shop[style*="flex"],
+    #useObject[style*="flex"],
+    #inventory-list,
+    #monster-list,
+    #trophies-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 420px) {
+    .stat-grid {
+        grid-template-columns: 1fr;
+    }
+
+    #actions button {
+        min-width: 100%;
+    }
+}
