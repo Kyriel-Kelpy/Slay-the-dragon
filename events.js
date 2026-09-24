@@ -838,7 +838,9 @@ const story = {
          choices: [
             { text: "Acheter", next: "buy", action: displayShopItems },
             { text: "Vendre", next: "sell", action: sellItems },
-            { text: "Retourner en ville", next: "city" },
+            { text: "Retourner en ville", next: "city", action: function() {
+                menuDiv.style.display = 'block';
+            } },
        ]
      },
 

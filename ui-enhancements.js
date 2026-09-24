@@ -137,6 +137,12 @@
             if (typeof displaySection === "function") {
                 displaySection("boutique");
             }
+            // displayShopItems()/sellItems() cachent le menu en l'ouvrant ;
+            // il faut le réafficher ici, sinon il reste caché tant qu'on ne
+            // relance pas une action qui le force (ex: goExplore).
+            if (typeof menuDiv !== "undefined" && menuDiv) {
+                menuDiv.style.display = 'block';
+            }
         });
         ensureCloseButton("useObject");
 
