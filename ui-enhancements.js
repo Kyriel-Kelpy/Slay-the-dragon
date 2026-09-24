@@ -77,17 +77,25 @@
         // ----- Barre de santé de l'adversaire -----
         const monsterHealthText = document.getElementById("monsterHealth");
         const monsterHealthBarFill = document.getElementById("monsterHealthBarFill");
-        let monsterMaxHealth = 0;
+
+        function getMonsterMaxHealth() {
+            // monsters[monsterIndex].health est la vraie vie max du monstre
+            // en combat (variables globales définies par monsters.js /
+            // variables.js, jamais modifiées pendant le combat — seule la
+            // variable monsterHealth diminue). On l'utilise en priorité.
+            if (typeof monsters !== "undefined" && typeof monsterIndex !== "undefined" && monsters[monsterIndex]) {
+                return monsters[monsterIndex].health;
+            }
+            return null;
+        }
 
         function updateMonsterHealthBar() {
             if (!monsterHealthBarFill) return;
             const current = getNum(monsterHealthText);
-            // Un nouvel adversaire apparaît toujours avec sa santé pleine,
-            // donc toute hausse de la valeur signale un nouveau max à suivre.
-            if (current > monsterMaxHealth) {
-                monsterMaxHealth = current;
+            const max = getMonsterMaxHealth();
+            if (max) {
+                monsterHealthBarFill.style.width = toPercent(current, max) + "%";
             }
-            monsterHealthBarFill.style.width = toPercent(current, monsterMaxHealth) + "%";
         }
 
         watchText(monsterHealthText, updateMonsterHealthBar);
@@ -144,6 +152,46 @@
         }
 
         watchText(storyText, scrollStoryToTop);
+
+        // ----- Notifications flottantes (toasts) -----
+        // Le moteur de jeu affiche déjà un petit message quand on utilise
+        // un objet (script.js, useItem) ou qu'on en vend un (shop.js,
+        // sellItem) : un <p> orange ajouté au texte d'histoire. On repère
+        // automatiquement ces messages (sans toucher au code qui les crée)
+        // et on les affiche aussi sous forme de notification bien visible,
+        // au lieu de les laisser se perdre en bas du texte.
+        const toastStack = document.createElement("div");
+        toastStack.className = "toast-stack";
+        appMain.insertBefore(toastStack, appMain.firstChild);
+
+        function showToast(text) {
+            if (!text) return;
+            const toast = document.createElement("div");
+            toast.className = "toast";
+            toast.textContent = text;
+            toastStack.appendChild(toast);
+            toast.addEventListener("animationend", function (e) {
+                if (e.animationName === "toastOut") toast.remove();
+            });
+        }
+
+        if (storyText) {
+            const toastObserver = new MutationObserver(function (mutations) {
+                mutations.forEach(function (mutation) {
+                    mutation.addedNodes.forEach(function (node) {
+                        if (
+                            node.nodeType === 1 &&
+                            node.tagName === "P" &&
+                            node.style &&
+                            node.style.color === "orange"
+                        ) {
+                            showToast(node.textContent);
+                        }
+                    });
+                });
+            });
+            toastObserver.observe(storyText, { childList: true });
+        }
     }
 
     if (document.readyState === "loading") {

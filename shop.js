@@ -122,11 +122,17 @@ function sellItems() {
     const allowedItems = ['Joyau', 'Gemme', 'Mini potion de soin', 'Maxi potion de soin'];
 
     // Combiner tous les objets vendables
+    // Important : on calcule l'index (position réelle dans la collection
+    // d'origine) AVANT le filtre .filter(), pas après. Sinon, dès qu'un
+    // objet non vendable (prix à 0) se trouve avant un objet vendable dans
+    // une collection, l'index calculé ne correspond plus à sa vraie
+    // position — et le bouton "Vendre" peut vendre le mauvais objet, voire
+    // échouer silencieusement si l'index dépasse la taille de la liste.
     const sellableItems = [
-        ...inventory.filter(item => allowedItems.includes(item.name) && item.price > 0).map((item, index) => ({ ...item, source: 'inventory', index })),
-        ...playerWeapons.filter(item => item.price > 0).map((item, index) => ({ ...item, source: 'weapon', index })),
-        ...playerProtections.filter(item => item.price > 0).map((item, index) => ({ ...item, source: 'protection', index })),
-        ...playerAccessoires.filter(item => item.price > 0).map((item, index) => ({ ...item, source: 'accessory', index }))
+        ...inventory.map((item, index) => ({ ...item, source: 'inventory', index })).filter(item => allowedItems.includes(item.name) && item.price > 0),
+        ...playerWeapons.map((item, index) => ({ ...item, source: 'weapon', index })).filter(item => item.price > 0),
+        ...playerProtections.map((item, index) => ({ ...item, source: 'protection', index })).filter(item => item.price > 0),
+        ...playerAccessoires.map((item, index) => ({ ...item, source: 'accessory', index })).filter(item => item.price > 0)
     ];
 
     // Vérifier s'il y a des objets à vendre
@@ -137,7 +143,7 @@ function sellItems() {
     }
 
     // Créer le HTML pour les objets à vendre
-    const sellItemsHTML = sellableItems.map((item, globalIndex) => {
+    const sellItemsHTML = sellableItems.map((item) => {
         const isDiscounted = ['weapon', 'protection', 'accessory'].includes(item.source);  // Vérifier si l'objet appartient aux catégories concernées
         const displayPrice = isDiscounted ? Math.floor(item.price * 0.5) : item.price;  // Appliquer la réduction si nécessaire
         const priceText = isDiscounted ? `Prix : ${displayPrice} pièces d'or (Réduit)` : `Prix : ${displayPrice} pièces d'or`;  // Afficher le prix réduit ou normal
@@ -147,8 +153,8 @@ function sellItems() {
                 <h3>${item.name}</h3>
                 <p>${item.description}</p>
                 <p>${priceText}</p>
-                <button class="sell-button" onclick="sellItem('${item.source}', ${globalIndex})">Vendre</button>
-                <p id="message-sell-${item.source}-${globalIndex}" class="sell-message"></p>
+                <button class="sell-button" onclick="sellItem('${item.source}', ${item.index})">Vendre</button>
+                <p id="message-sell-${item.source}-${item.index}" class="sell-message"></p>
             </div>
         `;
     }).join('');
