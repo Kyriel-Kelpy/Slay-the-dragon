@@ -99,7 +99,7 @@
         // qui effacerait un bouton statique posé dans le HTML. On le
         // réinsère donc automatiquement à chaque mise à jour du contenu,
         // sans toucher à la logique de jeu elle-même.
-        function ensureCloseButton(sectionId) {
+        function ensureCloseButton(sectionId, onClosed) {
             const panel = document.getElementById(sectionId);
             if (!panel) return;
 
@@ -112,6 +112,7 @@
                 btn.textContent = "×";
                 btn.onclick = function () {
                     closeSection(sectionId);
+                    if (typeof onClosed === "function") onClosed();
                 };
                 panel.insertBefore(btn, panel.firstChild);
             }
@@ -121,7 +122,14 @@
             observer.observe(panel, { childList: true });
         }
 
-        ensureCloseButton("shop");
+        ensureCloseButton("shop", function () {
+            // Fermer le tiroir d'articles ramène toujours à la section
+            // "boutique" (Acheter / Vendre / Retourner), qu'on soit venu
+            // du sous-écran d'achat ou de vente.
+            if (typeof displaySection === "function") {
+                displaySection("boutique");
+            }
+        });
         ensureCloseButton("useObject");
 
         // ----- Remonte le défilement de l'histoire en haut à chaque nouveau texte -----
