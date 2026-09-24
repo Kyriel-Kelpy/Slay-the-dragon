@@ -123,6 +123,19 @@
 
         ensureCloseButton("shop");
         ensureCloseButton("useObject");
+
+        // ----- Remonte le défilement de l'histoire en haut à chaque nouveau texte -----
+        // displaySection() (events.js) fait `textDiv.innerHTML = section.text;`
+        // à chaque nouvelle section/choix : on observe ce changement et on
+        // ramène simplement le scroll de la zone centrale en haut.
+        const storyText = document.getElementById("storyText");
+        const appMain = document.getElementById("appMain");
+
+        function scrollStoryToTop() {
+            if (appMain) appMain.scrollTop = 0;
+        }
+
+        watchText(storyText, scrollStoryToTop);
     }
 
     if (document.readyState === "loading") {
