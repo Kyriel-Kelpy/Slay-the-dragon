@@ -27,6 +27,25 @@ function hasInventorySpace() {
     return inventory.length < getInventoryCap();
 }
 
+// Affiche pseudo + difficulté dans le panneau "Infos" du menu
+function updateInfosSection() {
+    const infosPseudo = document.getElementById("infosPseudo");
+    const infosDifficulty = document.getElementById("infosDifficulty");
+    if (infosPseudo) infosPseudo.innerText = pseudo || "Aventurier inconnu";
+    if (infosDifficulty) infosDifficulty.innerText = getDifficultySettings().label;
+}
+
+// Réinitialise complètement la partie (stats, inventaire, sauvegarde) et
+// relance le jeu depuis l'écran d'intro.
+function startNewGame() {
+    const confirmed = confirm(
+        "Cela va effacer la sauvegarde actuelle et recommencer une nouvelle partie depuis le début. Continuer ?"
+    );
+    if (!confirmed) return;
+    localStorage.removeItem("slayTheDragonSave");
+    location.reload();
+}
+
 // Objet en attente d'ajout tant que le joueur n'a pas libéré une place
 let pendingLoot = null;
 
@@ -113,6 +132,82 @@ function computeLevelFromXp(xpValue) {
     return level;
 }
 
+// ================== Score de fin de partie ==================
+// Calcule un score sur 100 selon : la fin atteinte, le bestiaire découvert,
+// les succès débloqués, le niveau atteint et un bonus lié à la difficulté.
+function computeScore() {
+    const details = [];
+    let total = 0;
+
+    // Fin atteinte (jusqu'à 30)
+    let endingPoints = 0;
+    if (typeof finishGame1 !== "undefined" && finishGame1 === 1) {
+        endingPoints = 30;
+        details.push({ label: "Fin : Reine Leona", points: endingPoints });
+    } else if (typeof finishGame2 !== "undefined" && finishGame2 === 1) {
+        endingPoints = 18;
+        details.push({ label: "Fin : Sauveur de Realm", points: endingPoints });
+    } else {
+        details.push({ label: "Fin de la partie", points: 0 });
+    }
+    total += endingPoints;
+
+    // Bestiaire découvert (jusqu'à 20)
+    const totalMonsters = (typeof monsters !== "undefined" && monsters.length) || 0;
+    const bestiaireRatio = totalMonsters > 0 ? bestiaire.length / totalMonsters : 0;
+    const bestiairePoints = Math.round(bestiaireRatio * 20);
+    details.push({ label: `Bestiaire découvert (${bestiaire.length}/${totalMonsters})`, points: bestiairePoints });
+    total += bestiairePoints;
+
+    // Succès débloqués (jusqu'à 20)
+    const totalTitres = (typeof titres !== "undefined" && titres.length) || 0;
+    const successRatio = totalTitres > 0 ? playerTrophies.length / totalTitres : 0;
+    const successPoints = Math.round(successRatio * 20);
+    details.push({ label: `Succès débloqués (${playerTrophies.length}/${totalTitres})`, points: successPoints });
+    total += successPoints;
+
+    // Niveau atteint, plafonné au niveau 50 (jusqu'à 15)
+    const levelRatio = Math.min(lvl / 50, 1);
+    const levelPoints = Math.round(levelRatio * 15);
+    details.push({ label: `Niveau atteint (${lvl}/50)`, points: levelPoints });
+    total += levelPoints;
+
+    // Bonus lié à la difficulté choisie (jusqu'à 15)
+    const difficultyBonus = { novice: 0, aventurier: 8, heroique: 15 };
+    const diffPoints = difficultyBonus[difficulty] || 0;
+    details.push({ label: `Difficulté : ${getDifficultySettings().label}`, points: diffPoints });
+    total += diffPoints;
+
+    total = Math.max(0, Math.min(total, 100));
+
+    return { total, details };
+}
+
+// Affiche la fenêtre de révélation du score à la fin de la partie.
+function revealScore() {
+    const scoreDialog = document.getElementById("scoreReveal");
+    const scoreValue = document.getElementById("scoreValue");
+    const scoreDetails = document.getElementById("scoreDetails");
+    if (!scoreDialog || !scoreValue || !scoreDetails) return;
+
+    const { total, details } = computeScore();
+
+    scoreValue.innerText = `${total} / 100`;
+    scoreDetails.innerHTML = "";
+    details.forEach(detail => {
+        const li = document.createElement("li");
+        const label = document.createElement("span");
+        label.innerText = detail.label;
+        const points = document.createElement("strong");
+        points.innerText = (detail.points >= 0 ? "+" : "") + detail.points;
+        li.appendChild(label);
+        li.appendChild(points);
+        scoreDetails.appendChild(li);
+    });
+
+    scoreDialog.classList.remove("hidden");
+}
+
 let xp = 0;
 let lvl = 1;
 let health = 100;
@@ -184,6 +279,8 @@ const menu1 = document.querySelector("#menu1");
 const menu2 = document.querySelector("#menu2");
 const menu3 = document.querySelector("#menu3");
 const menu4 = document.querySelector("#menu4");
+const menu5 = document.querySelector("#menu5");
+const newGameBtn = document.querySelector("#newGameBtn");
 
 const button1 = document.querySelector("#button1");
 const button2 = document.querySelector("#button2");
@@ -206,6 +303,11 @@ menu1.onclick = () => openSection("#equip");
 menu2.onclick = () => openSection("#inventory");
 menu3.onclick = () => openSection("#trophies");
 menu4.onclick = () => openSection("#bestiaire");
+menu5.onclick = () => {
+    updateInfosSection();
+    openSection("#infos");
+};
+newGameBtn.onclick = startNewGame;
 
 const shopDiv = document.querySelector('#shop');
 

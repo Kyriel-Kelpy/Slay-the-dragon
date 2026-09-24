@@ -1735,6 +1735,12 @@ function displaySection(sectionId) {
         return;
     }
 
+    // Révèle le score final quand on atteint une fin de partie (bonne ou mauvaise)
+    const endingSections = ["lose", "lose2", "finishGame1", "finishGame2", "victoireAlbion"];
+    if (endingSections.includes(sectionId) && typeof revealScore === "function") {
+        revealScore();
+    }
+
     // Afficher le texte de l'histoire
     textDiv.innerHTML = section.text;
 

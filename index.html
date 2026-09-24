@@ -94,6 +94,8 @@
                 <button id="menu2">🎒 Inventaire</button>
                 <button id="menu3">🏆 Succès</button>
                 <button id="menu4">📖 Bestiaire</button>
+                <button id="menu5">ℹ️ Infos</button>
+                <button id="newGameBtn">🆕 Nouvelle partie</button>
             </div>
         </div>
 
@@ -146,6 +148,17 @@
                 <button class="modal-close" onclick="closeSection('bestiaire')" aria-label="Fermer">×</button>
                 <h1>✧Bestiaire✧</h1>
                 <div id="monster-list" class="modal-body"></div>
+            </div>
+        </div>
+
+        <div id="infos" class="option-menu">
+            <div class="modal-card">
+                <button class="modal-close" onclick="closeSection('infos')" aria-label="Fermer">×</button>
+                <h1>✧Infos✧</h1>
+                <div class="modal-body infos-body">
+                    <p><strong>Nom d'aventurier :</strong> <span id="infosPseudo">—</span></p>
+                    <p><strong>Difficulté :</strong> <span id="infosDifficulty">—</span></p>
+                </div>
             </div>
         </div>
 
@@ -231,6 +244,16 @@
                 <h2>🎒 Inventaire plein</h2>
                 <p>Choisissez un objet à jeter pour faire de la place.</p>
                 <ul id="discardList" class="modal-body"></ul>
+            </div>
+        </div>
+
+        <!-- ===== Fenêtre de révélation du score, à la mort ou à une fin ===== -->
+        <div id="scoreReveal" class="dialog hidden">
+            <div class="dialog-content score-content">
+                <h2>🏁 Fin de l'aventure</h2>
+                <p class="score-value" id="scoreValue">0 / 100</p>
+                <ul id="scoreDetails" class="score-details"></ul>
+                <button type="button" onclick="document.getElementById('scoreReveal').classList.add('hidden')">Fermer</button>
             </div>
         </div>
 
