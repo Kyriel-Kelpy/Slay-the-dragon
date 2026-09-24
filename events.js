@@ -279,14 +279,12 @@ function chercheButin(){
     if (health <= 0){
         displaySection("lose");
     } else {
-    if (Math.floor(Math.random() * 3) === 1) {
+    if (Math.random() < (1 / 3) * getDropMultiplier()) {
         let randomNumber = Math.floor(Math.random() * 8);
         let butin = butins[randomNumber];
         let butinName = butins[randomNumber].name;
         seekSuccess++;
-        inventory.push(butin);
-        displayInventory();
-        textDiv.innerText += "\n Vos recherches sont fructueuses. Vous avez obtenu : " + butinName + "\n"
+        addToInventory(butin, "\n Vos recherches sont fructueuses. Vous avez obtenu : " + butinName + "\n");
     } else {
         showTrophie();
         seekFail++;
@@ -368,9 +366,7 @@ function wanderer() {
             let randomNumber = Math.floor(Math.random() * 6);
             let butin = butins[randomNumber];
             let butinName = butins[randomNumber].name;
-            inventory.push(butin);
-            displayInventory();
-            textDiv.innerText += "Vous avez obtenu : " + butinName + "\n"
+            addToInventory(butin, "Vous avez obtenu : " + butinName + "\n");
             console.log("Cas 3 : Action pour 3");
             break;
         case 4:

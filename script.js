@@ -1,5 +1,5 @@
 function updateLevel(currentXp) {
-    let newLevel = Math.floor(currentXp / 100) + 1; // Calcule le niveau
+    let newLevel = computeLevelFromXp(currentXp); // Calcule le niveau (coût progressif par niveau)
 
     if (newLevel > lvl) {
         // Génère un nombre aléatoire entre 0, 1 et 2
@@ -318,19 +318,17 @@ function defeatMonster(){
     useDiv.style.display = 'none';
     let bonusGold = Math.floor(monsters[monsterIndex].level * 3.5);
     gold += bonusGold;
-    let bonusXp = Math.floor(monsters[monsterIndex].level * 4);
+    let bonusXp = Math.floor(monsters[monsterIndex].level * 4 * getXpMultiplier());
     xp += bonusXp;
     goldText.innerText = gold;
     xpText.innerText = xp;
     textDiv.innerText += "Vous avez gagné " + bonusXp + " XP\n"
     textDiv.innerText += "Vous avez gagné " + bonusGold + " pièces d'or\n"
-    if (Math.floor(Math.random() * 2) === 1) {
+    if (Math.random() < 0.5 * getDropMultiplier()) {
         let randomNumber = Math.floor(Math.random() * 8);
         let butin = butins[randomNumber];
         let butinName = butins[randomNumber].name;
-        inventory.push(butin);
-        displayInventory();
-        textDiv.innerText += "Vous avez obtenu : " + butinName + "\n"
+        addToInventory(butin, "Vous avez obtenu : " + butinName + "\n");
     } else {
        textDiv.innerText += "Vous n'avez obtenu aucun butin... \n";
     }

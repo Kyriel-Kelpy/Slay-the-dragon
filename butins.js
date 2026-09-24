@@ -130,7 +130,6 @@ const butins = [
 function recompenseKlaara(){
     trophieKlaara = 1;
     let butin = butins[8];
-    inventory.push(butin);
-    displayInventory();
+    addToInventory(butin);
     showTrophie();
 }

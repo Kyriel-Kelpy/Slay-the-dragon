@@ -883,3 +883,125 @@ select {
         min-width: 100%;
     }
 }
+
+/* ---------- Écran d'intro : pseudo + difficulté ---------- */
+
+.intro-screen {
+    z-index: 110; /* au-dessus de l'écran de chargement (100) */
+}
+
+.intro-content {
+    max-width: 460px;
+    text-align: left;
+}
+
+.intro-content h2 {
+    text-align: center;
+}
+
+.intro-content label {
+    display: block;
+    margin-top: 14px;
+    margin-bottom: 6px;
+    font-size: 14px;
+    color: var(--color-text-dim);
+}
+
+.intro-content input[type="text"] {
+    width: 100%;
+    box-sizing: border-box;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--color-border-soft);
+    border-radius: var(--radius-sm);
+    color: var(--color-text);
+    padding: 10px 12px;
+    font-size: 15px;
+}
+
+.intro-content h3 {
+    margin-top: 18px;
+    margin-bottom: 8px;
+    color: var(--color-accent-light);
+    font-size: 15px;
+}
+
+.difficulty-options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.difficulty-btn {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background-color: rgba(0, 0, 0, 0.28);
+    background-image: none;
+    color: var(--color-text);
+    border: 1px solid var(--color-border-soft);
+    box-shadow: none;
+    padding: 10px 12px;
+}
+
+.difficulty-btn strong {
+    display: block;
+    color: var(--color-accent-light);
+    margin-bottom: 2px;
+}
+
+.difficulty-btn span {
+    display: block;
+    font-size: 12px;
+    font-weight: normal;
+    color: var(--color-text-dim);
+    letter-spacing: normal;
+}
+
+.difficulty-btn.selected {
+    border-color: var(--color-accent);
+    background-color: rgba(201, 162, 74, 0.18);
+}
+
+.intro-error {
+    color: #ff8a8a;
+    font-size: 13px;
+    margin: 10px 0 0;
+    text-align: center;
+}
+
+#startAdventureBtn {
+    width: 100%;
+    margin-top: 16px;
+}
+
+.intro-load-btn {
+    width: 100%;
+    margin-top: 8px;
+    background-image: none;
+    background-color: transparent;
+    color: var(--color-text-dim);
+    box-shadow: none;
+    border: 1px solid var(--color-border-soft);
+}
+
+/* ---------- Fenêtre "inventaire plein" ---------- */
+
+#discardList {
+    list-style: none;
+    margin: 12px 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 40vh;
+}
+
+#discardList li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.28);
+    border: 1px solid var(--color-border-soft);
+    border-radius: var(--radius-sm);
+    padding: 8px 10px;
+}

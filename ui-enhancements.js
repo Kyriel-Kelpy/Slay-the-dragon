@@ -65,9 +65,13 @@
         function updateXpBar() {
             if (!xpBarFill) return;
             const lvl = getNum(lvlText) || 1;
-            const xpAtLevelStart = (lvl - 1) * 100;
+            // xpRequiredForLevel (variables.js) reflète le coût progressif
+            // par niveau (100, 110, 120...) plutôt qu'un coût fixe de 100.
+            if (typeof xpRequiredForLevel !== "function") return;
+            const xpAtLevelStart = xpRequiredForLevel(lvl);
+            const xpForThisLevel = xpRequiredForLevel(lvl + 1) - xpAtLevelStart;
             const progress = getNum(xpText) - xpAtLevelStart;
-            xpBarFill.style.width = toPercent(progress, 100) + "%";
+            xpBarFill.style.width = toPercent(progress, xpForThisLevel) + "%";
         }
 
         watchText(xpText, updateXpBar);

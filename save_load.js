@@ -1,5 +1,7 @@
 function saveGame() {
     const gameData = {
+        pseudo,
+        difficulty,
         xp,
         lvl,
         health,
@@ -65,6 +67,10 @@ function loadGame() {
     const savedGame = JSON.parse(localStorage.getItem("slayTheDragonSave"));
 
     if (savedGame) {
+
+        // Restaurer pseudo et difficulté (sauvegardes plus anciennes : valeurs par défaut)
+        pseudo = savedGame.pseudo || "Aventurier";
+        difficulty = savedGame.difficulty || "novice";
 
         // Restaurer les variables principales
         xp = savedGame.xp || 0;
@@ -143,6 +149,10 @@ function loadGame() {
         displayInventory();
 
         displaySection(playerProgression);
+
+        const introScreen = document.getElementById("introScreen");
+        if (introScreen) introScreen.classList.add("hidden");
+
         alert("Jeu chargé !");
     } else {
         alert("Aucune sauvegarde trouvée !");

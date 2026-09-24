@@ -194,6 +194,46 @@
             <p>Chargement en cours...</p>
         </div>
 
+        <!-- ===== Écran d'intro : pseudo + difficulté ===== -->
+        <div id="introScreen" class="dialog intro-screen">
+            <div class="dialog-content intro-content">
+                <h2>🐉 Bienvenue, aventurier</h2>
+                <p>Un dragon terrorise le royaume de Realm. On raconte qu'un aventurier assez brave (ou assez fou) pourrait bien le terrasser un jour... Serez-vous celui ou celle-là ?</p>
+
+                <label for="pseudoInput">Comment vous appelle-t-on ?</label>
+                <input type="text" id="pseudoInput" maxlength="20" placeholder="Votre nom d'aventurier">
+
+                <h3>Choisissez votre difficulté</h3>
+                <div class="difficulty-options">
+                    <button type="button" class="difficulty-btn" data-difficulty="novice">
+                        <strong>Novice</strong>
+                        <span>Inventaire illimité. L'expérience du jeu telle qu'elle a toujours été.</span>
+                    </button>
+                    <button type="button" class="difficulty-btn" data-difficulty="aventurier">
+                        <strong>Aventurier</strong>
+                        <span>Inventaire limité à 6 objets. XP et butin réduits (×0,75 / ×0,7).</span>
+                    </button>
+                    <button type="button" class="difficulty-btn" data-difficulty="heroique">
+                        <strong>Héroïque</strong>
+                        <span>Inventaire limité à 4 objets. XP et butin nettement réduits (×0,5 / ×0,5).</span>
+                    </button>
+                </div>
+
+                <p id="introError" class="intro-error hidden"></p>
+                <button type="button" id="startAdventureBtn">Commencer l'aventure</button>
+                <button type="button" id="introLoadBtn" class="intro-load-btn hidden">📂 Charger ma partie</button>
+            </div>
+        </div>
+
+        <!-- ===== Fenêtre "inventaire plein" : demande de jeter un objet ===== -->
+        <div id="discardPrompt" class="dialog hidden">
+            <div class="dialog-content">
+                <h2>🎒 Inventaire plein</h2>
+                <p>Choisissez un objet à jeter pour faire de la place.</p>
+                <ul id="discardList" class="modal-body"></ul>
+            </div>
+        </div>
+
     </div>
 
     <script src="animation.js"></script>

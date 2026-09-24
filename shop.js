@@ -65,6 +65,12 @@ function buyItem(index, type) {
         messageElement.textContent = "Pas assez de pièces d'or";
         messageElement.style.color = "red";
         messageElement.style.display = "block";
+    } else if (type === 'potion' && !hasInventorySpace()) {
+        // On vérifie la place avant de débiter l'or : pas question de faire
+        // payer le joueur pour un objet qu'on ne peut pas encore lui donner.
+        messageElement.textContent = "Inventaire plein ! Jetez un objet avant d'acheter.";
+        messageElement.style.color = "red";
+        messageElement.style.display = "block";
     } else {
         gold -= item.price;
         goldText.innerText = gold;
@@ -87,7 +93,7 @@ function buyItem(index, type) {
                 updateEquipOptions(); // Mettre à jour les listes déroulantes
                 break;
             case 'potion':
-                inventory.push(item); // Ajoute la potion à l'inventaire
+                addToInventory(item); // Ajoute la potion à l'inventaire (place déjà garantie)
                 break;
             default:
                 console.warn("Type d'équipement inconnu.");

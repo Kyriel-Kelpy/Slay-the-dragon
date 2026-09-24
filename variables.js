@@ -1,3 +1,118 @@
+// ================== Difficulté, pseudo & courbe d'XP ==================
+// Réglages par difficulté : plafond d'inventaire (objets de type "inventory",
+// hors armes/protections/accessoires possédés, qui restent illimités),
+// multiplicateur d'XP gagnée et multiplicateur de taux de drop de butin.
+const difficultySettings = {
+    novice:     { label: "Novice",     inventoryCap: Infinity, xpMultiplier: 1,    dropMultiplier: 1 },
+    aventurier: { label: "Aventurier", inventoryCap: 6,        xpMultiplier: 0.75, dropMultiplier: 0.7 },
+    heroique:   { label: "Héroïque",   inventoryCap: 4,        xpMultiplier: 0.5,  dropMultiplier: 0.5 }
+};
+
+let pseudo = "";
+let difficulty = "novice"; // Valeur par défaut tant que le joueur n'a pas choisi via l'écran d'intro
+
+function getDifficultySettings() {
+    return difficultySettings[difficulty] || difficultySettings.novice;
+}
+function getXpMultiplier() {
+    return getDifficultySettings().xpMultiplier;
+}
+function getDropMultiplier() {
+    return getDifficultySettings().dropMultiplier;
+}
+function getInventoryCap() {
+    return getDifficultySettings().inventoryCap;
+}
+function hasInventorySpace() {
+    return inventory.length < getInventoryCap();
+}
+
+// Objet en attente d'ajout tant que le joueur n'a pas libéré une place
+let pendingLoot = null;
+
+// Ajoute un objet à l'inventaire en respectant le plafond de la difficulté.
+// Si l'inventaire est plein, l'objet est mis en attente et une fenêtre
+// demande au joueur de jeter un objet existant pour libérer une place ;
+// l'objet en attente est alors ajouté automatiquement.
+function addToInventory(item, obtainedMessage) {
+    if (hasInventorySpace()) {
+        inventory.push(item);
+        displayInventory();
+        if (obtainedMessage) textDiv.innerText += obtainedMessage;
+        return true;
+    }
+    pendingLoot = { item: item, message: obtainedMessage };
+    textDiv.innerText += `Votre inventaire est plein ! Jetez un objet pour récupérer : ${item.name}\n`;
+    promptDiscardItem();
+    return false;
+}
+
+function promptDiscardItem() {
+    const discardList = document.getElementById("discardList");
+    const discardPrompt = document.getElementById("discardPrompt");
+    if (!discardList || !discardPrompt) return;
+
+    discardList.innerHTML = "";
+    inventory.forEach((invItem, index) => {
+        const li = document.createElement("li");
+        const name = document.createElement("strong");
+        name.innerText = invItem.name;
+        li.appendChild(name);
+
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.innerText = "Jeter";
+        btn.onclick = () => discardItemAt(index);
+        li.appendChild(btn);
+
+        discardList.appendChild(li);
+    });
+
+    discardPrompt.classList.remove("hidden");
+}
+
+function discardItemAt(index) {
+    inventory.splice(index, 1);
+
+    if (pendingLoot) {
+        const loot = pendingLoot;
+        pendingLoot = null;
+        inventory.push(loot.item);
+        if (loot.message) textDiv.innerText += loot.message;
+    }
+
+    displayInventory();
+
+    const discardPrompt = document.getElementById("discardPrompt");
+    if (discardPrompt) discardPrompt.classList.add("hidden");
+}
+
+// Coût en XP pour passer du niveau `level` au niveau `level + 1`.
+// Progressif (100, 110, 120, ...) pour éviter que les gros gains d'XP de
+// fin de jeu ne fassent grimper plusieurs niveaux d'un coup.
+function xpCostForLevel(level) {
+    return 100 + (level - 1) * 10;
+}
+
+// XP total cumulé nécessaire pour atteindre `level`.
+function xpRequiredForLevel(level) {
+    let total = 0;
+    for (let l = 1; l < level; l++) {
+        total += xpCostForLevel(l);
+    }
+    return total;
+}
+
+// Calcule le niveau correspondant à un total d'XP donné, en tenant compte
+// du coût progressif par niveau.
+function computeLevelFromXp(xpValue) {
+    let level = 1;
+    while (xpValue >= xpRequiredForLevel(level + 1)) {
+        level++;
+    }
+    return level;
+}
+
 let xp = 0;
 let lvl = 1;
 let health = 100;
@@ -187,3 +302,56 @@ function afficheMenu(){
 }
 
 menuDiv.onclick = afficheMenu;
+
+// ================== Écran d'intro : pseudo + difficulté ==================
+(function setupIntroScreen() {
+    const introScreen = document.getElementById("introScreen");
+    const pseudoInput = document.getElementById("pseudoInput");
+    const startBtn = document.getElementById("startAdventureBtn");
+    const introError = document.getElementById("introError");
+    const introLoadBtn = document.getElementById("introLoadBtn");
+    const difficultyButtons = document.querySelectorAll(".difficulty-btn");
+
+    if (!introScreen || !startBtn) return;
+
+    // Si une sauvegarde existe déjà, on propose de la charger directement
+    // depuis l'écran d'intro plutôt que d'obliger à recommencer.
+    if (introLoadBtn) {
+        if (localStorage.getItem("slayTheDragonSave")) {
+            introLoadBtn.classList.remove("hidden");
+            introLoadBtn.onclick = () => {
+                loadGame();
+            };
+        } else {
+            introLoadBtn.classList.add("hidden");
+        }
+    }
+
+    let chosenDifficulty = null;
+
+    difficultyButtons.forEach(btn => {
+        btn.onclick = () => {
+            chosenDifficulty = btn.dataset.difficulty;
+            difficultyButtons.forEach(b => b.classList.remove("selected"));
+            btn.classList.add("selected");
+            if (introError) introError.classList.add("hidden");
+        };
+    });
+
+    startBtn.onclick = () => {
+        const typedPseudo = (pseudoInput.value || "").trim();
+        if (!typedPseudo) {
+            introError.textContent = "Merci d'entrer un nom d'aventurier.";
+            introError.classList.remove("hidden");
+            return;
+        }
+        if (!chosenDifficulty) {
+            introError.textContent = "Merci de choisir une difficulté.";
+            introError.classList.remove("hidden");
+            return;
+        }
+        pseudo = typedPseudo;
+        difficulty = chosenDifficulty;
+        introScreen.classList.add("hidden");
+    };
+})();
