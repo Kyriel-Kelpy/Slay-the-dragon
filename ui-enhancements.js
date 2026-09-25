@@ -148,6 +148,14 @@
                 menuDiv.style.display = 'block';
             }
         });
+
+        ensureCloseButton("arene", function () {
+            // openArene() reste sur la section "city" et cache juste le menu ;
+            // il suffit de le réafficher à la fermeture.
+            if (typeof menuDiv !== "undefined" && menuDiv) {
+                menuDiv.style.display = 'block';
+            }
+        });
         ensureCloseButton("useObject");
 
         // ----- Remonte le défilement de l'histoire en haut à chaque nouveau texte -----

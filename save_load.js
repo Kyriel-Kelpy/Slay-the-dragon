@@ -71,6 +71,7 @@ function loadGame() {
         // Restaurer pseudo et difficulté (sauvegardes plus anciennes : valeurs par défaut)
         pseudo = savedGame.pseudo || "Aventurier";
         difficulty = savedGame.difficulty || "novice";
+        if (typeof addPseudoTitleOption === "function") addPseudoTitleOption();
 
         // Restaurer les variables principales
         xp = savedGame.xp || 0;

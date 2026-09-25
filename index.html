@@ -158,7 +158,12 @@
                 <div class="modal-body infos-body">
                     <p><strong>Nom d'aventurier :</strong> <span id="infosPseudo">—</span></p>
                     <p><strong>Difficulté :</strong> <span id="infosDifficulty">—</span></p>
+                    <p><strong>Attaque totale :</strong> <span id="infosAttack">—</span></p>
+                    <p><strong>Vitesse totale :</strong> <span id="infosSpeed">—</span></p>
                 </div>
+                <h3 class="infos-score-title">Score actuel</h3>
+                <p class="score-value" id="infosScoreValue">0 / 100</p>
+                <ul id="infosScoreDetails" class="score-details"></ul>
             </div>
         </div>
 
@@ -166,6 +171,8 @@
         <div id="shop" class="sheet"></div>
 
         <div id="useObject" class="sheet"></div>
+
+        <div id="arene" class="sheet"></div>
 
         <!-- ===== Dialogues ===== -->
         <div id="levelUpDialog" class="dialog hidden">
@@ -265,6 +272,7 @@
     <script src="equipement.js" defer></script>
     <script src="shop.js" defer></script>
     <script src="butins.js" defer></script>
+    <script src="arene.js" defer></script>
     <script src="events.js" defer></script>
     <script src="script.js" defer></script>
     <script src="success.js" defer></script>

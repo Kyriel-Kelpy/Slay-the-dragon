@@ -55,11 +55,11 @@ function capitalizeFirstLetter(str) {
 
 // Exemple d'appel lorsque l'achèvement se produit
 function onAchievementUnlocked(achievementTitle) {
-    // Ajoutez le nouveau titre à la liste déroulante
+    // Ajoute simplement le nouveau titre à la liste déroulante ; on ne force
+    // plus l'affichage dessus (ça écrasait le titre déjà choisi par le
+    // joueur, et si deux succès se débloquaient d'un coup, seul le dernier
+    // restait affiché). Le joueur choisit lui-même son titre affiché.
     addTitle(achievementTitle);
-
-    // Vous pouvez aussi définir ce titre comme titre sélectionné si nécessaire
-    document.getElementById('titleSelect').value = achievementTitle;
 }
 
 

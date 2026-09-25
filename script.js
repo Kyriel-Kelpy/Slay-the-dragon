@@ -311,6 +311,16 @@ function isPlayerDodge (speed){
     return Math.random() * 100 < speed;
 }
 
+// Chance de réussir une fuite : dépend de l'écart de vitesse entre le
+// joueur et le monstre affronté, mais toujours plafonnée entre 35% et 90%
+// pour ne jamais être ni gratuite, ni quasi impossible.
+function getFleeChance() {
+    const monsterSpeed = (monsters[monsterIndex] && monsters[monsterIndex].speed) || 0;
+    const baseChance = 0.66;
+    const adjusted = baseChance + (speed - monsterSpeed) * 0.01;
+    return Math.max(0.35, Math.min(0.9, adjusted));
+}
+
 function defeatMonster(){
     menuDiv.style.display = 'none';
     displaySection("victory");
@@ -549,13 +559,16 @@ function useObject() {
         return;
     }
 
-    const useItemsHTML = usableItems.map((item, index) => {
+    const useItemsHTML = usableItems.map((item) => {
+        // On utilise l'index réel dans l'inventaire (et non l'index dans la
+        // liste filtrée usableItems), sinon on risque d'agir sur le mauvais
+        // objet dès qu'un objet non-utilisable est mélangé dans l'inventaire.
+        const realIndex = inventory.indexOf(item);
         return `
             <div class="use-item">
                 <h3>${item.name}</h3>
                 <p>${item.description}</p>
-                <button class="use-button" onclick="useItem(${index})">Utiliser</button>
-                <p id="message-use-${item.name}-${index}" class="use-message"></p>
+                <button class="use-button" onclick="useItem(${realIndex})">Utiliser</button>
             </div>
         `;
     }).join('');
@@ -564,24 +577,32 @@ function useObject() {
     useDiv.style.display = 'flex';
 }
 
+let useItemInProgress = false; // Garde-fou anti double-clic/double-tap
+
 function useItem(index) {
+    if (useItemInProgress) return;
+    useItemInProgress = true;
+    setTimeout(() => { useItemInProgress = false; }, 400);
+
     const item = inventory[index];
 
     if (!item) {
         console.error("Objet introuvable !");
+        useItemInProgress = false;
         return;
     }
 
-    // Vérifier si l'action est une fonction et l'exécuter
+    // Vérifier si l'action est une fonction et l'exécuter.
+    // Chaque objet gère lui-même son retrait de l'inventaire (voir
+    // butins.js, removeFromInventory) : pas besoin de le refaire ici, ça
+    // provoquait un retrait en double (et parfois du mauvais objet, une
+    // fois l'inventaire déjà décalé par le premier retrait).
     if (typeof item.action === 'function') {
         item.action(); // Exécuter l'action définie dans l'objet
         console.log(`${item.name} a été utilisé.`);
     } else {
         console.error("Aucune action valide définie pour cet objet !");
     }
-
-    // Retirer l'objet de l'inventaire après utilisation
-    inventory.splice(index, 1);
 
     if (textDiv) {
         const message = document.createElement('p');
@@ -597,7 +618,7 @@ function useItem(index) {
         defeatMonster();
     } else {
         // Si le monstre est encore vivant, gérer son attaque
-        if (isPlayerDodge()) {
+        if (isPlayerDodge(speed)) {
             textDiv.innerHTML += "Vous esquivez l'attaque du monstre.<br>";
         } else {
             let opponentDamage = getAttackValue(monsters[monsterIndex].power);

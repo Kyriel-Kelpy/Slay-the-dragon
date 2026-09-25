@@ -682,7 +682,8 @@ select {
 
 .shop-item,
 .use-item,
-.sell-item {
+.sell-item,
+.arene-card {
     background: rgba(0, 0, 0, 0.28);
     border: 1px solid var(--color-border-soft);
     border-radius: var(--radius-sm);
@@ -695,7 +696,8 @@ select {
 
 .shop-item:hover,
 .use-item:hover,
-.sell-item:hover {
+.sell-item:hover,
+.arene-card:hover {
     transform: translateY(-2px);
     border-color: var(--color-border);
 }
@@ -1066,4 +1068,39 @@ select {
 
 .score-details li strong {
     color: var(--color-accent-light);
+}
+
+/* ---------- Arène : paris sur les monstres ---------- */
+
+.arene-bets {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+}
+
+.arene-bet-btn {
+    flex: 1;
+    min-width: 70px;
+}
+
+.arene-bet-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.arene-result {
+    grid-column: 1 / -1;
+    text-align: center;
+    font-weight: bold;
+    color: var(--color-accent-light);
+    margin-top: 8px;
+    min-height: 1.2em;
+}
+
+.infos-score-title {
+    margin: 14px 0 6px;
+    color: var(--color-accent-light);
+    font-size: 15px;
+    text-align: center;
 }

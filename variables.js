@@ -31,8 +31,50 @@ function hasInventorySpace() {
 function updateInfosSection() {
     const infosPseudo = document.getElementById("infosPseudo");
     const infosDifficulty = document.getElementById("infosDifficulty");
+    const infosAttack = document.getElementById("infosAttack");
+    const infosSpeed = document.getElementById("infosSpeed");
+    const infosScoreValue = document.getElementById("infosScoreValue");
+    const infosScoreDetails = document.getElementById("infosScoreDetails");
+
     if (infosPseudo) infosPseudo.innerText = pseudo || "Aventurier inconnu";
     if (infosDifficulty) infosDifficulty.innerText = getDifficultySettings().label;
+    // Valeurs totales actuelles (équipement/effets compris), pas les valeurs de base
+    if (infosAttack) infosAttack.innerText = strenght;
+    if (infosSpeed) infosSpeed.innerText = speed;
+
+    if (infosScoreValue && infosScoreDetails) {
+        const { total, details } = computeScore();
+        infosScoreValue.innerText = `${total} / 100`;
+        infosScoreDetails.innerHTML = "";
+        details.forEach(detail => {
+            const li = document.createElement("li");
+            const label = document.createElement("span");
+            label.innerText = detail.label;
+            const points = document.createElement("strong");
+            points.innerText = (detail.points >= 0 ? "+" : "") + detail.points;
+            li.appendChild(label);
+            li.appendChild(points);
+            infosScoreDetails.appendChild(li);
+        });
+    }
+}
+
+// Ajoute le pseudo choisi à l'intro comme option sélectionnable dans le menu
+// déroulant des titres, et en fait le titre affiché par défaut (à la place
+// du placeholder générique "Aventurier").
+function addPseudoTitleOption() {
+    const titleSelect = document.getElementById("titleSelect");
+    if (!titleSelect || !pseudo) return;
+
+    let pseudoOption = titleSelect.querySelector('option[data-pseudo-option="true"]');
+    if (!pseudoOption) {
+        pseudoOption = document.createElement("option");
+        pseudoOption.dataset.pseudoOption = "true";
+        titleSelect.insertBefore(pseudoOption, titleSelect.firstChild);
+    }
+    pseudoOption.value = pseudo;
+    pseudoOption.textContent = pseudo;
+    titleSelect.value = pseudo;
 }
 
 // Réinitialise complètement la partie (stats, inventaire, sauvegarde) et
@@ -454,6 +496,7 @@ menuDiv.onclick = afficheMenu;
         }
         pseudo = typedPseudo;
         difficulty = chosenDifficulty;
+        addPseudoTitleOption();
         introScreen.classList.add("hidden");
     };
 })();

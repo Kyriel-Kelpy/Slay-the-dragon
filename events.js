@@ -653,6 +653,7 @@ const story = {
             <li>vadrouilleur ça et là </li>
             <li>faire un tour en Boutique pour faire des achats.</li>
             <li>vous reposer à l'auberge et restorer votre santé (25 pièces d'or)</li>
+            <li>tenter votre chance à l'Arène en misant sur un combat de monstres</li>
             <li>explorer les régions alentours de Realm</li>
             <li>vous rendre dans les Montagnes pour affronter le Dragon Ancien qui terrorise les habitants</li>
             </ul><br>
@@ -662,6 +663,7 @@ const story = {
              { text: "Vagabonder", next: "wander", action: wanderer },
              { text: "Aller en boutique", next: "boutique", action: goToShop},
              { text: "Se reposer à l'auberge (25 pièces d'or)", next: "auberge", action: rest },
+             { text: "Tenter sa chance à l'Arène", next: "city", action: openArene },
              { text: "Explorer les régions alentours", next: "explore", action: goExplore },
              { text: "Combattre le dragon", next: "repaireDragon", action: goFightDragon }
         ]
@@ -1778,7 +1780,7 @@ button3.onclick = () => {
     // Générer un nombre aléatoire entre 0 et 1
     let chance = Math.random();
 
-    if (chance < 2 / 3) { // 2 chances sur 3 de réussir
+    if (chance < getFleeChance()) { // Dépend de la vitesse (script.js), plafonné entre 35% et 90%
         console.log("Vous avez réussi à vous enfuir !");
         displaySection("explore");
         monsterStats.style.display = 'none';
@@ -1788,7 +1790,7 @@ button3.onclick = () => {
         console.log("Vous avez échoué à fuir !");
         textDiv.innerHTML += "Vous n'avez pas réussi à vous enfuir.<br><br>";
         // Vous pouvez ajouter des conséquences ici (par exemple, le monstre attaque)
-        if (isPlayerDodge()) {
+        if (isPlayerDodge(speed)) {
             textDiv.innerHTML += "Vous esquivez l'attaque du monstre.<br>";
         } else {
             let opponentDamage = getAttackValue(monsters[monsterIndex].power);
