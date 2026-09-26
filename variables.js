@@ -1,3 +1,19 @@
+// ================== Monstres exclus de l'Arène et du Colisée ==================
+// Adversaires uniques liés à une quête/un événement (ne doivent jamais être
+// tirés au sort comme simples "monstres du bestiaire"), + "férik" dont la
+// défaite déclenche une malédiction permanente (perte de santé max) qui n'a
+// aucun sens dans ces activités annexes.
+const SPECIAL_MONSTER_NAMES = [
+    "Arlen, le chevalier fantôme",
+    "Arlak, le Fort",
+    "Anssio, le Rapide",
+    "Leona Mereo, la Dresseuse Gloutonne",
+    "raganna, la dragonne",
+    "Albion, le Chevalier Royal",
+    "Albion, le Chevalier Dragon",
+    "férik"
+];
+
 // ================== Difficulté, pseudo & courbe d'XP ==================
 // Réglages par difficulté : plafond d'inventaire (objets de type "inventory",
 // hors armes/protections/accessoires possédés, qui restent illimités),

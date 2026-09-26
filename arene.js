@@ -10,7 +10,8 @@ let areneRoster = [];
 let areneBetPlaced = false;
 
 function generateAreneRoster() {
-    const pool = bestiaire.length >= 3 ? bestiaire.slice() : monsters.slice();
+    const rawPool = bestiaire.length >= 3 ? bestiaire : monsters;
+    const pool = rawPool.filter(m => !SPECIAL_MONSTER_NAMES.includes(m.name));
     const combattantCount = Math.min(pool.length, Math.random() < 0.4 ? 4 : 3);
 
     const chosen = [];
@@ -30,6 +31,17 @@ function generateAreneRoster() {
     });
 
     areneBetPlaced = false;
+}
+
+// Affiche un message dans le journal + déclenche le popup rapide (même
+// système que pour l'utilisation d'objets/achats en boutique), plutôt que
+// d'écrire un message statique en bas du panneau de l'Arène.
+function showQuickToast(msg) {
+    if (!textDiv) return;
+    const message = document.createElement('p');
+    message.textContent = msg;
+    message.style.color = "orange";
+    textDiv.appendChild(message);
 }
 
 function renderArene() {
@@ -60,7 +72,7 @@ function renderArene() {
         `;
     }).join('');
 
-    areneDiv.innerHTML = cardsHTML + `<p id="areneResult" class="arene-result"></p>`;
+    areneDiv.innerHTML = cardsHTML;
     areneDiv.style.display = 'flex';
 }
 
@@ -70,14 +82,12 @@ function openArene() {
 }
 
 function placeAreneBet(index, amount) {
-    const resultEl = document.getElementById("areneResult");
-
     if (areneBetPlaced) {
-        if (resultEl) resultEl.textContent = "Vous avez déjà misé lors de cette visite. Revenez plus tard pour de nouvelles cotes.";
+        showQuickToast("Vous avez déjà misé lors de cette visite. Revenez plus tard pour de nouvelles cotes.");
         return;
     }
     if (gold < amount) {
-        if (resultEl) resultEl.textContent = "Vous n'avez pas assez d'or pour cette mise.";
+        showQuickToast("Vous n'avez pas assez d'or pour cette mise.");
         return;
     }
 
@@ -103,9 +113,9 @@ function placeAreneBet(index, amount) {
     if (won) {
         const payout = Math.round(amount * chosenEntry.payoutMultiplier);
         gold += payout;
-        if (resultEl) resultEl.textContent = `${chosenEntry.monster.name} l'emporte ! Vous gagnez ${payout} pièces d'or.`;
+        showQuickToast(`${chosenEntry.monster.name} l'emporte ! Vous gagnez ${payout} pièces d'or.`);
     } else {
-        if (resultEl) resultEl.textContent = `${winningEntry.monster.name} l'emporte... Vous perdez votre mise de ${amount} pièces d'or.`;
+        showQuickToast(`${winningEntry.monster.name} l'emporte... Vous perdez votre mise de ${amount} pièces d'or.`);
     }
 
     goldText.innerText = gold;

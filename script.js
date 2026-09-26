@@ -287,7 +287,11 @@ function attack() {
         monsterStats.style.display = 'none';
         actionsDiv.style.display = 'none';
         useDiv.style.display = 'none';
-        displaySection("lose"); // Fin de partie
+        if (typeof inColisee !== "undefined" && inColisee) {
+            resolveColiseeDefeat();
+        } else {
+            displaySection("lose"); // Fin de partie
+        }
         return;
     }
 
@@ -324,8 +328,18 @@ function getFleeChance() {
 function defeatMonster(){
     menuDiv.style.display = 'none';
     displaySection("victory");
-    killMonster++;
     useDiv.style.display = 'none';
+
+    // Victoire au Colisée : récompense dédiée, on ignore complètement le
+    // butin/or/xp normal ainsi que les effets spéciaux liés au nom du
+    // monstre (les boss d'événement et "férik" ne devraient jamais
+    // apparaître ici, mais cette coupure est une sécurité supplémentaire).
+    if (typeof inColisee !== "undefined" && inColisee) {
+        resolveColiseeVictory();
+        return;
+    }
+
+    killMonster++;
     let bonusGold = Math.floor(monsters[monsterIndex].level * 3.5);
     gold += bonusGold;
     let bonusXp = Math.floor(monsters[monsterIndex].level * 4 * getXpMultiplier());
@@ -639,7 +653,11 @@ function useItem(index) {
         monsterStats.style.display = 'none';
         actionsDiv.style.display = 'none';
         useDiv.style.display = 'none';
-        displaySection("lose");
+        if (typeof inColisee !== "undefined" && inColisee) {
+            resolveColiseeDefeat();
+        } else {
+            displaySection("lose");
+        }
     }
 
     // Mettre à jour l'interface utilisateur
