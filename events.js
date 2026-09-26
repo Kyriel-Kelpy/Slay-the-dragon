@@ -657,6 +657,8 @@ const story = {
             <li>faire un tour en Boutique pour faire des achats.</li>
             <li>vous reposer à l'auberge et restorer votre santé (25 pièces d'or)</li>
             <li>explorer les régions alentours de Realm</li>
+            <li>tenter votre chance à l'<strong>Arène</strong>, en misant de l'or sur l'issue de combats entre monstres</li>
+            <li>payer un droit d'entrée pour affronter un adversaire boosté au <strong>Colisée</strong>, contre une belle récompense d'XP</li>
             <li>vous rendre dans les Montagnes pour affronter le Dragon Ancien qui terrorise les habitants</li>
             </ul><br>
             Que décidez vous ?
@@ -666,6 +668,8 @@ const story = {
              { text: "Aller en boutique", next: "boutique", action: goToShop},
              { text: "Se reposer à l'auberge (25 pièces d'or)", next: "auberge", action: rest },
              { text: "Explorer les régions alentours", next: "explore", action: goExplore },
+             { text: "Aller à l'Arène", next: "arene", action: openArene },
+             { text: "Aller au Colisée", next: "colisee", action: openColisee },
              { text: "Combattre le dragon", next: "repaireDragon", action: goFightDragon }
         ]
      },
