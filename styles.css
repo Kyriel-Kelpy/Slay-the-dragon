@@ -323,7 +323,7 @@ select {
 .toast-stack {
     position: sticky;
     top: 16px;
-    z-index: 70;
+    z-index: 9999;
     display: flex;
     flex-direction: column;
     align-items: center;
