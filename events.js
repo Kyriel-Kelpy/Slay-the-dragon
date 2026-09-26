@@ -1,5 +1,8 @@
-function randomMonster(a, b){
-    monsterIndex = Math.floor(Math.random() * (b - a + 1)) + a;
+function randomMonster(a, b, extra){
+    const pool = [];
+    for (let i = a; i <= b; i++) pool.push(i);
+    if (Array.isArray(extra)) pool.push(...extra);
+    monsterIndex = pool[Math.floor(Math.random() * pool.length)];
     const monster = monsters.find(m => m.index === monsterIndex);
     if (monster) {
         monsterName.innerText = monsters[monsterIndex].name;
@@ -53,13 +56,13 @@ function updateBestiarySection() {
 
 
 function fightMonsterPlains(){
-    randomMonster(0, 8);
+    randomMonster(0, 8, [35, 36, 37]);
 }
 function fightMonsterForest(){
-    randomMonster(9, 17);
+    randomMonster(9, 17, [38, 39, 40]);
 }
 function fightMonsterCave(){
-    randomMonster(18, 26);
+    randomMonster(18, 26, [41, 42, 43]);
 }
 
 function fightArlen(){
@@ -653,8 +656,6 @@ const story = {
             <li>vadrouilleur ça et là </li>
             <li>faire un tour en Boutique pour faire des achats.</li>
             <li>vous reposer à l'auberge et restorer votre santé (25 pièces d'or)</li>
-            <li>tenter votre chance à l'Arène en misant sur un combat de monstres</li>
-            <li>affronter des adversaires redoutables au Colisée contre récompense</li>
             <li>explorer les régions alentours de Realm</li>
             <li>vous rendre dans les Montagnes pour affronter le Dragon Ancien qui terrorise les habitants</li>
             </ul><br>
@@ -664,8 +665,6 @@ const story = {
              { text: "Vagabonder", next: "wander", action: wanderer },
              { text: "Aller en boutique", next: "boutique", action: goToShop},
              { text: "Se reposer à l'auberge (25 pièces d'or)", next: "auberge", action: rest },
-             { text: "Tenter sa chance à l'Arène", next: "city", action: openArene },
-             { text: "Affronter le Colisée", next: "city", action: openColisee },
              { text: "Explorer les régions alentours", next: "explore", action: goExplore },
              { text: "Combattre le dragon", next: "repaireDragon", action: goFightDragon }
         ]
@@ -1739,12 +1738,6 @@ function displaySection(sectionId) {
         return;
     }
 
-    // Révèle le score final quand on atteint une fin de partie (bonne ou mauvaise)
-    const endingSections = ["lose", "lose2", "finishGame1", "finishGame2", "victoireAlbion"];
-    if (endingSections.includes(sectionId) && typeof revealScore === "function") {
-        revealScore();
-    }
-
     // Afficher le texte de l'histoire
     textDiv.innerHTML = section.text;
 
@@ -1782,21 +1775,17 @@ button3.onclick = () => {
     // Générer un nombre aléatoire entre 0 et 1
     let chance = Math.random();
 
-    if (chance < getFleeChance()) { // Dépend de la vitesse (script.js), plafonné entre 35% et 90%
+    if (chance < 2 / 3) { // 2 chances sur 3 de réussir
         console.log("Vous avez réussi à vous enfuir !");
+        displaySection("explore");
         monsterStats.style.display = 'none';
         actionsDiv.style.display = 'none';
         menuDiv.style.display = 'block';
-        if (typeof inColisee !== "undefined" && inColisee) {
-            resolveColiseeFlee();
-        } else {
-            displaySection("explore");
-        }
     } else {
         console.log("Vous avez échoué à fuir !");
         textDiv.innerHTML += "Vous n'avez pas réussi à vous enfuir.<br><br>";
         // Vous pouvez ajouter des conséquences ici (par exemple, le monstre attaque)
-        if (isPlayerDodge(speed)) {
+        if (isPlayerDodge()) {
             textDiv.innerHTML += "Vous esquivez l'attaque du monstre.<br>";
         } else {
             let opponentDamage = getAttackValue(monsters[monsterIndex].power);
@@ -1813,12 +1802,8 @@ button3.onclick = () => {
             monsterStats.style.display = 'none';
             actionsDiv.style.display = 'none';
             useDiv.style.display = 'none';
-            if (typeof inColisee !== "undefined" && inColisee) {
-                resolveColiseeDefeat();
-            } else {
-                textDiv.innerHTML += "Vous n'avez pas réussi à vous enfuir.<br><br>";
-                displaySection("lose");
-            }
+            textDiv.innerHTML += "Vous n'avez pas réussi à vous enfuir.<br><br>";
+            displaySection("lose");        
         }
     }
 };

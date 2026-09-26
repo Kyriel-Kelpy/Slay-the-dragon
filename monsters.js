@@ -373,7 +373,7 @@ const monsters = [
         power : 55,
         speed : 30,
         description : "Un golem en or gardien d'un trésor enfoui dans les grottes obscures",
-        type: "dragon",
+        type: "humanoïde",
         zone : "grottes obscures",
         butin : ""
     },
@@ -453,6 +453,123 @@ const monsters = [
         description : "Un Chevalier Royal gorgé d'énergie vitale de Dragon Ancien. Il pourrait réduire en cendres des quartiers de Realm s'il le souhaite...",
         type: "dragon",
         zone : "Realm",
+        butin : ""
+    },
+
+    {
+        index : 35,
+        name: "pouss'écorce",
+        level: 2,
+        health : 16,
+        power : 6,
+        speed : 7,
+        description : "Une jeune pousse animée aux feuilles tranchantes, encore trop frêle pour représenter un vrai danger.",
+        type: "plante",
+        zone : "plaines émeraudes",
+        butin : ""
+    },
+
+    {
+        index : 36,
+        name: "cornebique",
+        level: 6,
+        health : 42,
+        power : 27,
+        speed : 14,
+        description : "Une chèvre sauvage aux cornes acérées et très solides, capable de charges puissantes qui déséquilibrent l'adversaire.",
+        type: "bête",
+        zone : "plaines émeraudes",
+        butin : ""
+    },
+
+    {
+        index : 37,
+        name: "zephyraigle",
+        level: 9,
+        health : 54,
+        power : 35,
+        speed : 19,
+        description : "Un rapace gigantesque au bec capable de transpercer une armure légère, maître incontesté du ciel des plaines.",
+        type: "bête ailée",
+        zone : "plaines émeraudes",
+        butin : ""
+    },
+
+    {
+        index : 38,
+        name: "hiboubou",
+        level: 9,
+        health : 22,
+        power : 12,
+        speed : 45,
+        description : "Un petit esprit hibou qui hante les branches basses, difficile à toucher dans la pénombre.",
+        type: "spirit",
+        zone : "forêt lugubre",
+        butin : ""
+    },
+
+    {
+        index : 39,
+        name: "ronce-garou",
+        level: 15,
+        health : 50,
+        power : 33,
+        speed : 25,
+        description : "Un loup-garou entravé de ronces maudites, mi-bête mi-démon, qui chasse en silence dans les fourrés.",
+        type: "démon",
+        zone : "forêt lugubre",
+        butin : ""
+    },
+
+    {
+        index : 40,
+        name: "serpent-de-brume",
+        level: 20,
+        health : 68,
+        power : 47,
+        speed : 55,
+        description : "Un serpent spectral qui se dissout dans le brouillard, insaisissable et mortel.",
+        type: "reptile",
+        zone : "forêt lugubre",
+        butin : ""
+    },
+
+    {
+        index : 41,
+        name: "cristalin",
+        level: 16,
+        health : 45,
+        power : 24,
+        speed : 35,
+        description : "Une gelée translucide qui absorbe la lumière des cristaux des grottes, discrète mais collante.",
+        type: "slime",
+        zone : "grottes obscures",
+        butin : ""
+    },
+
+    {
+        index : 42,
+        name: "chaman des ombres",
+        level: 21,
+        health : 75,
+        power : 40,
+        speed : 25,
+        description : "Un humanoïde ridé aux yeux luisants, capable d'invoquer de brèves ténèbres pour désorienter ses adversaires.",
+        type: "humanoïde",
+        zone : "grottes obscures",
+        butin : ""
+    },
+
+    {
+        index : 43,
+        name: "wyrm des profondeurs",
+        level: 24,
+        health : 130,
+        power : 49,
+        speed : 35,
+        description : "Un jeune ver-dragon aveugle qui creuse les tunnels les plus reculés, redouté pour la force brute de ses assauts.",
+        type: "dragon",
+        zone : "grottes obscures",
         butin : ""
     },
 ];
